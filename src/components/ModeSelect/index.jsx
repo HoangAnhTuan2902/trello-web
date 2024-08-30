@@ -16,7 +16,9 @@ function ModeSelect() {
 	const { mode, setMode } = useColorScheme();
 
 	return (
-		<FormControl size='small'>
+		<FormControl
+			size='small'
+			sx={{ minWidth: 100 }}>
 			<InputLabel id='label-select-dark-light-mode'>Mode</InputLabel>
 			<Select
 				labelId='label-select-dark-light-mode'
