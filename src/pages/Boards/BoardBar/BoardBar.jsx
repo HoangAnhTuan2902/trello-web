@@ -11,6 +11,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 
+import { capitalizeFirstLetter } from '~/utils/formatters';
+
 const MENU_STYLES = {
 	color: 'white',
 	bgcolor: 'transparent',
@@ -25,7 +27,7 @@ const MENU_STYLES = {
 	},
 };
 
-function BoardBar() {
+function BoardBar({ board }) {
 	return (
 		<Box
 			sx={{
@@ -44,13 +46,13 @@ function BoardBar() {
 				<Chip
 					sx={MENU_STYLES}
 					icon={<DashboardIcon />}
-					label='Tuan Dev MERN Stack'
+					label={board?.title}
 					clickable
 				/>
 				<Chip
 					sx={MENU_STYLES}
 					icon={<VpnLockIcon />}
-					label='Public/Private Workspaces'
+					label={capitalizeFirstLetter(board?.type)}
 					clickable
 				/>
 				<Chip

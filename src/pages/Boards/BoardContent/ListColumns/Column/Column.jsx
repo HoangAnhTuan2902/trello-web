@@ -20,9 +20,14 @@ import Cloud from '@mui/icons-material/Cloud';
 import Tooltip from '@mui/material/Tooltip';
 import ListCards from './ListCards/ListCards';
 
-function Column() {
+import { mapOrder } from '~/utils/sorts';
+
+function Column({ column }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
+
+	const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id');
+
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -54,7 +59,7 @@ function Column() {
 				<Typography
 					variant='h6'
 					sx={{ fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem' }}>
-					Column Title
+					{column.title}
 				</Typography>
 				<Box>
 					<Tooltip title='More options'>
@@ -119,7 +124,7 @@ function Column() {
 				</Box>
 			</Box>
 			{/*Box Column List Card */}
-			<ListCards />
+			<ListCards cards={orderedCards} />
 			{/*Box Column Footer */}
 			<Box
 				sx={{
