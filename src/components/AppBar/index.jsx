@@ -1,3 +1,4 @@
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import Box from '@mui/material/Box';
 import AppsIcon from '@mui/icons-material/Apps';
 import SvgIcon from '@mui/material/SvgIcon';
@@ -20,7 +21,6 @@ import Profliles from './Menus/Profliles';
 function AppBar() {
 	return (
 		<Box
-			px={2}
 			sx={{
 				width: '100%',
 				height: (theme) => theme.trello.appBarHeight,
@@ -29,6 +29,7 @@ function AppBar() {
 				justifyContent: 'space-between',
 				gap: 2,
 				overflowX: 'auto',
+				paddingX: 2,
 			}}>
 			<Box>
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -46,7 +47,6 @@ function AppBar() {
 							trello
 						</Typography>
 					</Box>
-
 					<Box
 						sx={{
 							display: { xs: 'none', md: 'flex' },
@@ -56,7 +56,11 @@ function AppBar() {
 						<Recent />
 						<Starred />
 						<Templates />
-						<Button variant='outlined'>Create</Button>
+						<Button
+							startIcon={<LibraryAddIcon />}
+							variant='outlined'>
+							Create
+						</Button>
 					</Box>
 				</Box>
 			</Box>
