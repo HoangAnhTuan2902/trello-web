@@ -33,7 +33,7 @@ function Profliles() {
 					aria-haspopup='true'
 					aria-expanded={open ? 'true' : undefined}>
 					<Avatar
-						sx={{ width: 34, height: 34 }}
+						sx={{ width: 36, height: 36 }}
 						alt='TuanDev'
 						src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
 					/>
