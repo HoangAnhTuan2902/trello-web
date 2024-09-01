@@ -20,11 +20,29 @@ import Cloud from '@mui/icons-material/Cloud';
 import Tooltip from '@mui/material/Tooltip';
 import ListCards from './ListCards/ListCards';
 
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 import { mapOrder } from '~/utils/sorts';
 
 function Column({ column }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
+
+	const { attributes, listeners, setNodeRef, transform, transition } =
+		useSortable({
+			id: column._id,
+			data: {
+				...column,
+			},
+		});
+
+	const dndKitColumnStyles = {
+		// touchAction: 'none', // dành cho sensor default dạng pointerSensor
+		/** dùng CSS.Transform sẽ bị lỗi kiểu strech */
+		transform: CSS.Translate.toString(transform),
+		transition,
+	};
 
 	const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id');
 
@@ -37,6 +55,10 @@ function Column({ column }) {
 
 	return (
 		<Box
+			ref={setNodeRef}
+			style={dndKitColumnStyles}
+			{...attributes}
+			{...listeners}
 			sx={{
 				minWidth: 300,
 				maxWidth: 300,
