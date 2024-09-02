@@ -39,6 +39,7 @@ function Card({ card }) {
 		transform: CSS.Translate.toString(transform),
 		transition,
 		opacity: isDragging ? 0.5 : undefined,
+		border: isDragging ? '1px solid #bdc3c7' : undefined,
 	};
 
 	return (
