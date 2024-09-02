@@ -24,7 +24,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import { mapOrder } from '~/utils/sorts';
-import { Opacity } from '@mui/icons-material';
 
 function Column({ column }) {
 	const [anchorEl, setAnchorEl] = useState(null);
