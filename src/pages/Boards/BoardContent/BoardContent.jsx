@@ -16,8 +16,6 @@ import {
 	closestCorners,
 	pointerWithin,
 	getFirstCollision,
-	rectIntersection,
-	closestCenter,
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import Column from './ListColumns/Column/Column';
@@ -350,13 +348,16 @@ function BoardContent({ board }) {
 			// tìm các điểm giao nhau, va chạm - intersections với con trỏ
 			const pointerIntersections = pointerWithin(args);
 
-			// thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây
-			const intersections = !!pointerIntersections?.length
-				? pointerIntersections
-				: rectIntersection(args);
+			// kéo 1 card có image cover lớn và kéo lên phá trên cùng ra khỏi khu vực kéo thả
+			if (!pointerIntersections?.length) return;
+
+			// thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây (không cần bước này nữa)
+			// const intersections = !!pointerIntersections?.length
+			// 	? pointerIntersections
+			// 	: rectIntersection(args);
 
 			// tìm overId đầu tiên trong mảng intersections ở trên
-			let overId = getFirstCollision(intersections, 'id');
+			let overId = getFirstCollision(pointerIntersections, 'id');
 
 			if (overId) {
 				const checkColumn = orderedColumns.find(
@@ -365,7 +366,7 @@ function BoardContent({ board }) {
 				if (checkColumn) {
 					// console.log('overId before', overId);
 
-					overId = closestCenter({
+					overId = closestCorners({
 						...args,
 						droppableContainers: args.droppableContainers.filter(
 							(container) =>
