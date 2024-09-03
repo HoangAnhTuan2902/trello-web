@@ -192,6 +192,21 @@ export const mockData = {
 					},
 				],
 			},
+			{
+				_id: 'column-id-04',
+				boardId: 'board-id-01',
+				title: 'Empty Column 04',
+				// tạo 1 card đặc biệt để giữ chức năng kéo thả cho column rỗng (vấn đề của dnd-kit)
+				cardOrderIds: ['column-id-04-placeholder-card'],
+				cards: [
+					{
+						_id: 'column-id-04-placeholder-card',
+						boardId: 'board-id-01',
+						columnId: 'column-id-04',
+						FE_PlaceholderCard: true,
+					},
+				],
+			},
 		],
 	},
 };
