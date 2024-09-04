@@ -1,25 +1,25 @@
-import { useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import Box from '@mui/material/Box';
 import AppsIcon from '@mui/icons-material/Apps';
-import SvgIcon from '@mui/material/SvgIcon';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
-import TextField from '@mui/material/TextField';
+import CloseIcon from '@mui/icons-material/Close';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Badge from '@mui/material/Badge';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import SvgIcon from '@mui/material/SvgIcon';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 
+import InputAdornment from '@mui/material/InputAdornment';
+import Tooltip from '@mui/material/Tooltip';
 import ModeSelect from '~/components/ModeSelect/ModeSelect';
-import Workspaces from './Menus/Workspaces';
+import Profliles from './Menus/Profliles';
 import Recent from './Menus/Recent';
 import Starred from './Menus/Starred';
 import Templates from './Menus/Templates';
-import Tooltip from '@mui/material/Tooltip';
-import Profliles from './Menus/Profliles';
-import InputAdornment from '@mui/material/InputAdornment';
+import Workspaces from './Menus/Workspaces';
 
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -95,11 +95,13 @@ function AppBar() {
 						),
 
 						endAdornment: searchValue && (
-							<CloseIcon
-								onClick={() => setSearchValue('')}
-								fontSize='small'
-								sx={{ color: 'white', cursor: 'pointer' }}
-							/>
+							<InputAdornment position='end'>
+								<CloseIcon
+									onClick={() => setSearchValue('')}
+									fontSize='small'
+									sx={{ color: 'white', cursor: 'pointer' }}
+								/>
+							</InputAdornment>
 						),
 					}}
 					sx={{
