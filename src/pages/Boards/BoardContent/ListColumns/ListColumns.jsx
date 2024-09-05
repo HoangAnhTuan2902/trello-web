@@ -5,6 +5,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Column from './Column/Column';
 
+import { toast } from 'react-toastify';
+
 import {
 	SortableContext,
 	horizontalListSortingStrategy,
@@ -21,7 +23,7 @@ function ListColumns({ columns }) {
 	};
 
 	const addNewColumn = () => {
-		// console.error('nhập title hộ cái');
+		toast.error('nhập title hộ cái');
 		if (!newColumnTitle) return;
 		// gọi API tạo mới column
 		setNewColumnTitle('');
