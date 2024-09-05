@@ -11,6 +11,7 @@ import {
 	createNewCardAPI,
 	createNewColumnAPI,
 	fetchBoardDetailsAPI,
+	updateBoardDetailsAPI,
 } from '~/apis';
 import { generatePlaceholderCard } from '~/utils/formatters';
 
@@ -62,6 +63,21 @@ function Board() {
 		setBoard(newBoard);
 	};
 
+	// gọi API cập nhật vị trí column khi kéo thả
+	const moveColumn = async (dndOrderedColumns) => {
+		// update state phía client
+		const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id);
+		const newBoard = { ...board };
+		newBoard.columns = dndOrderedColumns;
+		newBoard.columnOrderIds = dndOrderedColumnsIds;
+		setBoard(newBoard);
+
+		// gọi API update vị trí column
+		await updateBoardDetailsAPI(board._id, {
+			columnOrderIds: dndOrderedColumnsIds,
+		});
+	};
+
 	return (
 		<Container
 			disableGutters
@@ -70,6 +86,7 @@ function Board() {
 			<AppBar />
 			<BoardBar board={board} />
 			<BoardContent
+				moveColumn={moveColumn}
 				createNewCard={createNewCard}
 				createNewColumn={createNewColumn}
 				board={board}
