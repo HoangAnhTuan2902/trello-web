@@ -27,7 +27,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { mapOrder } from '~/utils/sorts';
 import { toast } from 'react-toastify';
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [newCardTitle, setNewCardTitle] = useState('');
 	const [openNewCardForm, setOpenNewCardForm] = useState(false);
@@ -40,12 +40,18 @@ function Column({ column }) {
 	};
 
 	const addNewCard = () => {
-		if (!newCardTitle) {
-			toast.error('nhập title hộ cái', {
+		if (!newCardTitle || newCardTitle.trim().length < 3) {
+			toast.error('title phải có độ dài hơn 3 ký tự', {
 				position: 'bottom-right',
 			});
 			return;
 		}
+		// tạo dữ liệu card để gọi API
+		const newCardData = {
+			title: newCardTitle,
+			columnId: column._id,
+		};
+		createNewCard(newCardData);
 		// gọi API tạo mới column
 		setNewCardTitle('');
 		setOpenNewCardForm((prev) => !prev);

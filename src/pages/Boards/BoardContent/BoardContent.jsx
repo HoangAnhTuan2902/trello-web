@@ -29,7 +29,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 	CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 };
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard }) {
 	const [orderedColumns, setOrderedColumns] = useState([]);
 	// cùng 1 thời điểm chỉ có 1 phần tử được kéo (column hoặc card)
 	const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -422,7 +422,11 @@ function BoardContent({ board }) {
 						theme.palette.mode === 'dark' ? '#34495e' : '#1976d2',
 					height: (theme) => theme.trello.boardContentHeight,
 				}}>
-				<ListColumns columns={orderedColumns} />
+				<ListColumns
+					createNewCard={createNewCard}
+					createNewColumn={createNewColumn}
+					columns={orderedColumns}
+				/>
 				<DragOverlay dropAnimation={dropAnimation}>
 					{!activeDragItemType && null}
 					{activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (

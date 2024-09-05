@@ -13,7 +13,7 @@ import {
 } from '@dnd-kit/sortable';
 import { useState } from 'react';
 
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumn, createNewCard }) {
 	const [newColumnTitle, setNewColumnTitle] = useState('');
 	const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
 
@@ -22,12 +22,17 @@ function ListColumns({ columns }) {
 		setOpenNewColumnForm((prev) => !prev);
 	};
 
-	const addNewColumn = () => {
-		if (!newColumnTitle) {
-			toast.error('nhập title hộ cái');
+	const addNewColumn = async () => {
+		if (!newColumnTitle || newColumnTitle.trim().length < 3) {
+			toast.error('title phải có độ dài lớn hơn 3 ký tự');
 			return;
 		}
 		// gọi API tạo mới column
+		const newColumnData = {
+			title: newColumnTitle,
+		};
+		await createNewColumn(newColumnData);
+
 		setNewColumnTitle('');
 		setOpenNewColumnForm((prev) => !prev);
 	};
@@ -60,6 +65,7 @@ function ListColumns({ columns }) {
 				{/* Column */}
 				{columns?.map((column) => (
 					<Column
+						createNewCard={createNewCard}
 						column={column}
 						key={column._id}
 					/>
