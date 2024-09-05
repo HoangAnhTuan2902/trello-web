@@ -25,6 +25,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import { mapOrder } from '~/utils/sorts';
+import { toast } from 'react-toastify';
 
 function Column({ column }) {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -39,7 +40,9 @@ function Column({ column }) {
 	};
 
 	const addNewCard = () => {
-		// console.error('nhập title hộ cái');
+		toast.error('nhập title hộ cái', {
+			position: 'bottom-right',
+		});
 		if (!newCardTitle) return;
 		// gọi API tạo mới column
 		setNewCardTitle('');
