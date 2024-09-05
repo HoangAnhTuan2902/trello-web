@@ -9,14 +9,16 @@ import {
 	// PointerSensor,
 	useSensor,
 	useSensors,
-	MouseSensor,
-	TouchSensor,
+	// MouseSensor,
+	// TouchSensor,
 	DragOverlay,
 	defaultDropAnimationSideEffects,
 	closestCorners,
 	pointerWithin,
 	getFirstCollision,
 } from '@dnd-kit/core';
+
+import { MouseSensor, TouchSensor } from '~/customLibraries/DndkitSensors';
 import { arrayMove } from '@dnd-kit/sortable';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/ListCards/Card/Card';
