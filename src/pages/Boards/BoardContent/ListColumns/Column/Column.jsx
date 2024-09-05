@@ -40,12 +40,10 @@ function Column({ column }) {
 	};
 
 	const addNewCard = () => {
-		if (!newCardTitle) {
-			toast.error('nhập title hộ cái', {
-				position: 'bottom-right',
-			});
-			return;
-		}
+		toast.error('nhập title hộ cái', {
+			position: 'bottom-right',
+		});
+		if (!newCardTitle) return;
 		// gọi API tạo mới column
 		setNewCardTitle('');
 		setOpenNewCardForm((prev) => !prev);

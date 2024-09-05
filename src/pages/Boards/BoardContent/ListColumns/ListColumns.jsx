@@ -23,10 +23,8 @@ function ListColumns({ columns }) {
 	};
 
 	const addNewColumn = () => {
-		if (!newColumnTitle) {
-			toast.error('nhập title hộ cái');
-			return;
-		}
+		toast.error('nhập title hộ cái');
+		if (!newColumnTitle) return;
 		// gọi API tạo mới column
 		setNewColumnTitle('');
 		setOpenNewColumnForm((prev) => !prev);
