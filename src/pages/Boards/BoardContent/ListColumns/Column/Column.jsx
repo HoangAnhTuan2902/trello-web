@@ -213,6 +213,7 @@ function Column({ column }) {
 								type='text'
 								size='small'
 								autoFocus
+								data-no-dnd='true'
 								value={newCardTitle}
 								onChange={(e) => setNewCardTitle(e.target.value)}
 								sx={{
@@ -226,6 +227,7 @@ function Column({ column }) {
 										color: (theme) => theme.palette.primary.main,
 									},
 									'& .MuiOutlinedInput-root': {
+										color: (theme) => theme.palette.primary.main,
 										'& fieldset': {
 											borderColor: (theme) => theme.palette.primary.main,
 										},
