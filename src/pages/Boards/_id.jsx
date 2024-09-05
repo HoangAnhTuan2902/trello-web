@@ -24,8 +24,8 @@ function Board() {
 			maxWidth={false}
 			sx={{ height: '100vh' }}>
 			<AppBar />
-			<BoardBar board={mockData.board} />
-			<BoardContent board={mockData.board} />
+			<BoardBar board={board} />
+			<BoardContent board={board} />
 		</Container>
 	);
 }
