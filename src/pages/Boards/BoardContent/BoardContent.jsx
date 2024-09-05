@@ -29,7 +29,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 	CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 };
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 	const [orderedColumns, setOrderedColumns] = useState([]);
 	// cùng 1 thời điểm chỉ có 1 phần tử được kéo (column hoặc card)
 	const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -315,6 +315,11 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
 						oldColumnIndex,
 						newColumnIndex,
 					);
+
+					// gọi function moveColumn để cập nhật vị trí column khi kéo thả
+					moveColumn(dndOrderedColumns);
+
+					// vẫn update state ở client để hiển thị ngay lập tức, tránh bị giật giao diện khi chưa gọi api hoàn tất
 					setOrderedColumns(dndOrderedColumns);
 				}
 
