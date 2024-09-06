@@ -1,9 +1,7 @@
 import { useState } from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 import AddCardIcon from '@mui/icons-material/AddCard';
+import CloseIcon from '@mui/icons-material/Close';
 import Cloud from '@mui/icons-material/Cloud';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentCut from '@mui/icons-material/ContentCut';
@@ -11,21 +9,23 @@ import ContentPaste from '@mui/icons-material/ContentPaste';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import ListCards from './ListCards/ListCards';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { mapOrder } from '~/utils/sorts';
 import { toast } from 'react-toastify';
+
+import ListCards from './ListCards/ListCards';
 
 function Column({ column, createNewCard }) {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -82,7 +82,7 @@ function Column({ column, createNewCard }) {
 		opacity: isDragging ? 0.5 : undefined,
 	};
 
-	const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id');
+	const orderedCards = column.cards;
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);

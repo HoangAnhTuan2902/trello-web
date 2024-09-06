@@ -1,9 +1,10 @@
 import { cloneDeep, isEmpty } from 'lodash';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import ListColumns from './ListColumns/ListColumns';
-import { mapOrder } from '~/utils/sorts';
+
 import {
 	DndContext,
 	// PointerSensor,
@@ -17,9 +18,9 @@ import {
 	pointerWithin,
 	getFirstCollision,
 } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
 
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndkitSensors';
-import { arrayMove } from '@dnd-kit/sortable';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/ListCards/Card/Card';
 import { generatePlaceholderCard } from '~/utils/formatters';
@@ -29,7 +30,13 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 	CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 };
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
+function BoardContent({
+	board,
+	createNewColumn,
+	createNewCard,
+	moveColumn,
+	moveCardInTheSameColumn,
+}) {
 	const [orderedColumns, setOrderedColumns] = useState([]);
 	// cùng 1 thời điểm chỉ có 1 phần tử được kéo (column hoặc card)
 	const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -43,7 +50,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 
 	useEffect(() => {
 		if (board?.columns && board?.columnOrderIds) {
-			setOrderedColumns(mapOrder(board.columns, board.columnOrderIds, '_id'));
+			setOrderedColumns(board.columns);
 		}
 	}, [board]);
 
@@ -266,6 +273,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 				const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(
 					(column) => column._id === activeDragItemId,
 				);
+
 				/** lấy vị trí mới của phần tử được kéo (từ overColumn)  */
 				const newCardIndex = overColumn?.cards?.findIndex(
 					(column) => column._id === overCardId,
@@ -278,6 +286,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 					newCardIndex,
 				);
 
+				const dndOrderedCardIds = dndOrderedCards.map((card) => card._id);
+				// update state trước khi gọi API để tránh delay
 				setOrderedColumns((prevColumns) => {
 					const nextColumns = cloneDeep(prevColumns);
 
@@ -289,12 +299,17 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 					// cập nhật 2 giá trị card và cardOrderIds trong targetColumn
 					if (targetColumn) {
 						targetColumn.cards = dndOrderedCards;
-						targetColumn.cardOrderIds = dndOrderedCards.map((card) => card._id);
+						targetColumn.cardOrderIds = dndOrderedCardIds;
 					}
 
 					// trả về giá trị state mới (chuẩn vị trí)
 					return nextColumns;
 				});
+				moveCardInTheSameColumn(
+					dndOrderedCards,
+					dndOrderedCardIds,
+					oldColumnWhenDraggingCard._id,
+				);
 			}
 		}
 		// Xử lý kéo thả column trong boardContent
@@ -316,11 +331,11 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 						newColumnIndex,
 					);
 
-					// gọi function moveColumn để cập nhật vị trí column khi kéo thả
-					moveColumn(dndOrderedColumns);
-
 					// vẫn update state ở client để hiển thị ngay lập tức, tránh bị giật giao diện khi chưa gọi api hoàn tất
 					setOrderedColumns(dndOrderedColumns);
+
+					// gọi function moveColumn để cập nhật vị trí column khi kéo thả
+					moveColumn(dndOrderedColumns);
 				}
 
 				// dùng arrayMove của dnd-kit để sắp xếp lại mảng Columns ban đầu
