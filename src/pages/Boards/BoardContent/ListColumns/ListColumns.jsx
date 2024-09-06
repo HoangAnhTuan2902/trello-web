@@ -1,8 +1,8 @@
 import CloseIcon from '@mui/icons-material/Close';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import Column from './Column/Column';
 
 import { toast } from 'react-toastify';
@@ -13,7 +13,12 @@ import {
 } from '@dnd-kit/sortable';
 import { useState } from 'react';
 
-function ListColumns({ columns, createNewColumn, createNewCard }) {
+function ListColumns({
+	columns,
+	createNewColumn,
+	createNewCard,
+	deleteColumnDetails,
+}) {
 	const [newColumnTitle, setNewColumnTitle] = useState('');
 	const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
 
@@ -65,6 +70,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
 				{/* Column */}
 				{columns?.map((column) => (
 					<Column
+						deleteColumnDetails={deleteColumnDetails}
 						createNewCard={createNewCard}
 						column={column}
 						key={column._id}
