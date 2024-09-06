@@ -7,23 +7,23 @@ import ListColumns from './ListColumns/ListColumns';
 
 import {
 	DndContext,
-	// PointerSensor,
-	useSensor,
-	useSensors,
 	// MouseSensor,
 	// TouchSensor,
 	DragOverlay,
-	defaultDropAnimationSideEffects,
 	closestCorners,
-	pointerWithin,
+	defaultDropAnimationSideEffects,
 	getFirstCollision,
+	pointerWithin,
+	// PointerSensor,
+	useSensor,
+	useSensors,
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndkitSensors';
+import { generatePlaceholderCard } from '~/utils/formatters';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/ListCards/Card/Card';
-import { generatePlaceholderCard } from '~/utils/formatters';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
 	COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -37,6 +37,7 @@ function BoardContent({
 	moveColumn,
 	moveCardInTheSameColumn,
 	moveCardToDifferentColumn,
+	deleteColumnDetails,
 }) {
 	const [orderedColumns, setOrderedColumns] = useState([]);
 	// cùng 1 thời điểm chỉ có 1 phần tử được kéo (column hoặc card)
@@ -458,6 +459,7 @@ function BoardContent({
 					createNewCard={createNewCard}
 					createNewColumn={createNewColumn}
 					columns={orderedColumns}
+					deleteColumnDetails={deleteColumnDetails}
 				/>
 				<DragOverlay dropAnimation={dropAnimation}>
 					{!activeDragItemType && null}
