@@ -22,7 +22,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
 		setOpenNewColumnForm((prev) => !prev);
 	};
 
-	const addNewColumn = async () => {
+	const addNewColumn = () => {
 		if (!newColumnTitle || newColumnTitle.trim().length < 3) {
 			toast.error('title phải có độ dài lớn hơn 3 ký tự');
 			return;
@@ -31,7 +31,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
 		const newColumnData = {
 			title: newColumnTitle,
 		};
-		await createNewColumn(newColumnData);
+		createNewColumn(newColumnData);
 
 		setNewColumnTitle('');
 		setOpenNewColumnForm((prev) => !prev);
