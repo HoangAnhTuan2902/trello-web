@@ -11,6 +11,7 @@ import {
 	createNewCardAPI,
 	createNewColumnAPI,
 	fetchBoardDetailsAPI,
+	moveCardToDifferentColumnAPI,
 	updateBoardDetailsAPI,
 	updateColumnDetailsAPI,
 } from '~/apis';
@@ -69,9 +70,16 @@ function Board() {
 			(column) => column._id === createdCard.columnId,
 		);
 		if (columnToUpdate) {
-			columnToUpdate.cards.push(createdCard);
-			columnToUpdate.cardOrderIds.push(createdCard._id);
+			// nếu column rỗng (chứa placeholder-card)
+			if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+				columnToUpdate.cards = [createdCard];
+				columnToUpdate.cardOrderIds = [createdCard._id];
+			} else {
+				columnToUpdate.cards.push(createdCard);
+				columnToUpdate.cardOrderIds.push(createdCard._id);
+			}
 		}
+
 		setBoard(newBoard);
 	};
 
@@ -87,6 +95,43 @@ function Board() {
 		// gọi API update vị trí column
 		updateBoardDetailsAPI(board._id, {
 			columnOrderIds: dndOrderedColumnsIds,
+		});
+	};
+
+	/**
+	 * khi di chuyển card sang column khác:
+	 * B1: cập nhật lại cardOrderIds của column cũ chứa nó
+	 * B2: cập nhật lại cardOrderIds của column mới chứa nó
+	 * B3: cập nhật lại columnId của card được kéo
+	 */
+	const moveCardToDifferentColumn = async (
+		currentCardId,
+		prevColumnId,
+		nextColumnId,
+		dndOrderedColumns,
+	) => {
+		// update state phía client
+		const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id);
+		const newBoard = { ...board };
+		newBoard.columns = dndOrderedColumns;
+		newBoard.columnOrderIds = dndOrderedColumnsIds;
+		setBoard(newBoard);
+
+		// gọi Api
+		let prevCardOrderIds =
+			dndOrderedColumns.find((column) => column._id === prevColumnId)
+				?.cardOrderIds || [];
+		// xóa phần từ placeholder-card nếu có trong mảng cardOrderIds trước khi gửi dữ liệu lên BE
+		if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = [];
+
+		moveCardToDifferentColumnAPI({
+			currentCardId,
+			prevColumnId,
+			prevCardOrderIds,
+			nextColumnId,
+			nextCardOrderIds: dndOrderedColumns.find(
+				(column) => column._id === nextColumnId,
+			)?.cardOrderIds,
 		});
 	};
 
@@ -137,6 +182,7 @@ function Board() {
 						createNewCard={createNewCard}
 						createNewColumn={createNewColumn}
 						moveCardInTheSameColumn={moveCardInTheSameColumn}
+						moveCardToDifferentColumn={moveCardToDifferentColumn}
 						board={board}
 					/>
 				</>

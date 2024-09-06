@@ -36,6 +36,7 @@ function BoardContent({
 	createNewCard,
 	moveColumn,
 	moveCardInTheSameColumn,
+	moveCardToDifferentColumn,
 }) {
 	const [orderedColumns, setOrderedColumns] = useState([]);
 	// cùng 1 thời điểm chỉ có 1 phần tử được kéo (column hoặc card)
@@ -89,6 +90,7 @@ function BoardContent({
 		overColumn,
 		active,
 		over,
+		triggerFrom,
 	) => {
 		setOrderedColumns((prevColumns) => {
 			// tìm vị trí của overCard đang kéo trong column đích (nơi activeCard sắp được thả)
@@ -164,7 +166,15 @@ function BoardContent({
 				);
 			}
 
-			// console.log('nextColumns', nextColumns);
+			// nếu func được gọi ở handleDragEnd thì gọi API cập nhật sắp xếp
+			if (triggerFrom === 'handleDragEnd') {
+				moveCardToDifferentColumn(
+					activeDraggingCardId,
+					oldColumnWhenDraggingCard?._id,
+					nextOverColumn?._id,
+					nextColumns,
+				);
+			}
 
 			return nextColumns;
 		});
@@ -224,6 +234,7 @@ function BoardContent({
 				overColumn,
 				active,
 				over,
+				'handleDragOver',
 			);
 		}
 	};
@@ -265,6 +276,7 @@ function BoardContent({
 					overColumn,
 					active,
 					over,
+					'handleDragEnd',
 				);
 			} else {
 				// hành động kéo thả card trong cùng 1 column
