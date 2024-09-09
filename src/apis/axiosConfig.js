@@ -2,13 +2,15 @@ import axios from 'axios';
 
 const instance = axios.create({
 	baseURL: 'http://localhost:8017',
+	withCredentials: true,
 });
+
+instance.defaults.withCredentials = true;
 
 // Add a request interceptor
 instance.interceptors.request.use(
 	function (config) {
 		// Do something before request is sent
-		config.headers.Authorization = `Bearer tuandev`;
 		return config;
 	},
 	function (error) {

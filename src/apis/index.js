@@ -14,12 +14,12 @@ export const updateBoardDetailsAPI = async (boardId, updateData) => {
 
 /** Column */
 export const createNewColumnAPI = async (newColumnData) => {
-	const res = await axios.post(`/v1/columns`, newColumnData);
+	const res = await axios.post('/v1/columns', newColumnData);
 	return res;
 };
 
 export const moveCardToDifferentColumnAPI = async (updateData) => {
-	const res = await axios.put(`/v1/boards/supports/moving_card`, updateData);
+	const res = await axios.put('/v1/boards/supports/moving_card', updateData);
 	return res;
 };
 
@@ -35,6 +35,18 @@ export const deleteColumnDetailsAPI = async (ColumnId) => {
 
 /** Card */
 export const createNewCardAPI = async (newCardData) => {
-	const res = await axios.post(`/v1/cards`, newCardData);
+	const res = await axios.post('/v1/cards', newCardData);
+	return res;
+};
+
+/** Login */
+export const loginAPI = async (loginData) => {
+	const res = await axios.post('/v1/auth/login', loginData);
+	return res;
+};
+
+/** Register */
+export const registerAPI = async (registerData) => {
+	const res = await axios.post('/v1/auth/register', registerData);
 	return res;
 };

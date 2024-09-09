@@ -1,14 +1,14 @@
+import AddToDriveIcon from '@mui/icons-material/AddToDrive';
+import BoltIcon from '@mui/icons-material/Bolt';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import VpnLockIcon from '@mui/icons-material/VpnLock';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import BoltIcon from '@mui/icons-material/Bolt';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import AddToDriveIcon from '@mui/icons-material/AddToDrive';
-import VpnLockIcon from '@mui/icons-material/VpnLock';
-import Chip from '@mui/material/Chip';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';

@@ -16,6 +16,9 @@ const theme = extendTheme({
 		columnHeaderHeight: COLUMN_HEADER_HEIGHT,
 		columnFooterHeight: COLUMN_FOOTER_HEIGHT,
 	},
+	font: {
+		logoFont: 'Playwrite CU, cursive',
+	},
 	// colorSchemes: {
 	// 	light: {
 	// 		palette: {
