@@ -145,7 +145,7 @@ function BoardBar({ board, isLoading }) {
 						<Tooltip title='Tuan Dev'>
 							<Avatar
 								alt='Tuan Dev'
-								src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
+								// src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
 							/>
 						</Tooltip>
 					)}

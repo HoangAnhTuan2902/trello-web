@@ -1,13 +1,17 @@
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid2 from '@mui/material/Grid2';
 import Link from '@mui/material/Link';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { registerAPI } from '~/apis';
+
+import { registerAPI, uploadAvatarAPI } from '~/apis';
 import validateEmail from '~/utils/validateEmail';
 
 export default function Register({ setValue }) {
@@ -17,47 +21,100 @@ export default function Register({ setValue }) {
 		username: '',
 		password: '',
 		email: '',
+		avatar: '',
 	});
+
+	const [image, setImage] = useState(null);
+	const [previeImage, setPrevieImage] = useState(null);
+
+	const handleSetImage = (e) => {
+		setImage(e);
+		const urlImage = URL.createObjectURL(e);
+		setPrevieImage(urlImage);
+	};
+
+	const handleUploadAvatar = async () => {
+		try {
+			const resCloud = await uploadAvatarAPI(image);
+			const avatarUrl = resCloud.secure_url;
+
+			return avatarUrl;
+		} catch (error) {
+			toast.error('Failed to upload avatar', { position: 'top-right' });
+			setIsLoading(false);
+			throw error; // Stop registration if avatar upload fails
+		}
+	};
 
 	const handleSubmitRegister = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
+
+		// Validate form inputs
 		if (
-			registerData.fullname === '' ||
-			registerData.username === '' ||
-			registerData.password === '' ||
-			registerData.email === ''
+			!registerData.fullname ||
+			!registerData.username ||
+			!registerData.password ||
+			!registerData.email ||
+			!image
 		) {
-			toast.error('Please fill all fields', {
-				position: 'top-right',
-			});
+			toast.error('Please fill all fields', { position: 'top-right' });
 			setIsLoading(false);
 			return;
 		}
+
+		// Validate email
 		if (!validateEmail(registerData.email)) {
-			toast.error('Invalid email address', {
-				position: 'top-right',
-			});
+			toast.error('Invalid email address', { position: 'top-right' });
 			setIsLoading(false);
 			return;
 		}
 
-		const res = await registerAPI(registerData);
-		if (res.statusCode === 422) {
-			toast.error(res.message, {
-				position: 'top-right',
-			});
-			setIsLoading(false);
-		}
-		console.log('res', res);
+		try {
+			// Upload avatar before registration
+			const avatarUrl = await handleUploadAvatar();
 
-		if (res.status === 201) {
-			toast.success(res.message, {
-				position: 'top-right',
-			});
-			setValue('1');
+			// Prepare registerData with the updated avatar URL
+			const dataToRegister = {
+				...registerData,
+				avatar: avatarUrl,
+			};
+
+			// After avatar upload, register user
+			const res = await registerAPI(dataToRegister);
+
+			if (res.statusCode === 422) {
+				toast.error(res.message, { position: 'top-right' });
+				setIsLoading(false);
+				return;
+			}
+
+			if (res.status === 201) {
+				toast.success(res.message, { position: 'top-right' });
+				setValue('1'); // Redirect after success
+			}
+		} catch (error) {
+			toast.error('Registration failed', { position: 'top-right' });
+		} finally {
+			setIsLoading(false);
 		}
 	};
+
+	const VisuallyHiddenInput = styled('input')({
+		clip: 'rect(0 0 0 0)',
+		clipPath: 'inset(50%)',
+		height: 1,
+		overflow: 'hidden',
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		whiteSpace: 'nowrap',
+		width: 1,
+	});
+
+	const Img = styled('img')({
+		maxWidth: 150,
+	});
 
 	return (
 		<Container
@@ -138,6 +195,27 @@ export default function Register({ setValue }) {
 								}
 							/>
 						</Grid2>
+						<Grid2>
+							<LoadingButton
+								component='label'
+								role={undefined}
+								variant='outlined'
+								tabIndex={-1}
+								startIcon={<CloudUploadIcon />}>
+								Upload Your Image
+								<VisuallyHiddenInput
+									type='file'
+									onChange={(e) => handleSetImage(e.target.files[0])}
+								/>
+							</LoadingButton>
+						</Grid2>
+						{previeImage ? (
+							<Grid2>
+								<Img src={previeImage} />
+							</Grid2>
+						) : (
+							''
+						)}
 					</Grid2>
 					<LoadingButton
 						onClick={(e) => handleSubmitRegister(e)}

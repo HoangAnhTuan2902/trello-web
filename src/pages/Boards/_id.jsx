@@ -234,7 +234,6 @@ function Board() {
 			disableGutters
 			maxWidth={false}
 			sx={{ height: '100vh' }}>
-			<AppBar isLoading={isLoading} />
 			<BoardBar
 				board={board}
 				isLoading={isLoading}

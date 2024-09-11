@@ -1,5 +1,4 @@
-// import { cyan, deepOrange, orange, teal } from '@mui/material/colors';
-import { extendTheme } from '@mui/material/styles';
+import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
 
 const APP_BAR_HEIGHT = 58;
 const BOARD_BAR_HEIGHT = 60;
@@ -22,7 +21,7 @@ const theme = extendTheme({
 	// colorSchemes: {
 	// 	light: {
 	// 		palette: {
-	// 			primary: teal,
+	// 			primary: lightBlue,
 	// 			secondary: deepOrange,
 	// 		},
 	// 	},

@@ -5,6 +5,7 @@ import Auth from './pages/Auth';
 import Register from './pages/Auth/Login';
 import Boards from './pages/Boards/Boards';
 import Login from './pages/Auth/Login';
+import RootLayout from './pages/RootLayout/RootLayout';
 
 function App() {
 	return (
@@ -31,14 +32,26 @@ function App() {
 
 					{/*Boards list */}
 					<Route
+						path='/root'
+						element={<RootLayout />}>
+						<Route
+							path='boards'
+							element={<Boards />}>
+							<Route
+								path=':boardId'
+								element={<Board />}
+							/>
+						</Route>
+					</Route>
+					{/* 
+					<Route
 						path='/boards'
 						element={<Boards />}>
-						{/**Board Details */}
 						<Route
 							path=':boardId'
 							element={<Board />}
 						/>
-					</Route>
+					</Route> */}
 				</Routes>
 			</BrowserRouter>
 		</>
