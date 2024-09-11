@@ -31,6 +31,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 };
 
 function BoardContent({
+	isLoading,
 	board,
 	createNewColumn,
 	createNewCard,
@@ -456,6 +457,7 @@ function BoardContent({
 					height: (theme) => theme.trello.boardContentHeight,
 				}}>
 				<ListColumns
+					isLoading={isLoading}
 					createNewCard={createNewCard}
 					createNewColumn={createNewColumn}
 					columns={orderedColumns}

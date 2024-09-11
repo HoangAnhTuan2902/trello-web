@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Column from './Column/Column';
-
+import Skeleton from '@mui/material/Skeleton';
 import { toast } from 'react-toastify';
 
 import {
@@ -14,6 +14,7 @@ import {
 import { useState } from 'react';
 
 function ListColumns({
+	isLoading,
 	columns,
 	createNewColumn,
 	createNewCard,
@@ -32,20 +33,17 @@ function ListColumns({
 			toast.error('title phải có độ dài lớn hơn 3 ký tự');
 			return;
 		}
-		// gọi API tạo mới column
 		const newColumnData = {
 			title: newColumnTitle,
 		};
 		createNewColumn(newColumnData);
-
 		setNewColumnTitle('');
 		setOpenNewColumnForm((prev) => !prev);
 	};
 
-	/** SortableContext yêu cầu item là 1 mảng để có thể áp dụng animation */
 	return (
 		<SortableContext
-			items={columns?.map((column) => column._id)} // Adjusted to pass item IDs
+			items={columns?.map((column) => column._id)}
 			strategy={horizontalListSortingStrategy}>
 			<Box
 				sx={{
@@ -67,40 +65,51 @@ function ListColumns({
 						backgroundColor: '#555',
 					},
 				}}>
-				{/* Column */}
+				{/* Loading Skeleton for Columns */}
 				{columns?.map((column) => (
 					<Column
+						key={column._id}
+						isLoading={isLoading}
 						deleteColumnDetails={deleteColumnDetails}
 						createNewCard={createNewCard}
 						column={column}
-						key={column._id}
 					/>
 				))}
 
-				{/* Box add new column */}
+				{/* Box to add new column */}
 				{!openNewColumnForm ? (
-					<Box
-						sx={{
-							minWidth: '230px',
-							maxWidth: '230px',
-							mx: 2,
-							borderRadius: '6px',
-							height: 'fit-content',
-							bgcolor: '#ffffff3d',
-						}}>
-						<Button
-							onClick={toggleNewColumnForm}
+					isLoading ? (
+						<Skeleton
+							animation='wave'
+							variant='rounded'
+							height={50}
+							width={230}
+							sx={{ mx: 2 }}
+						/>
+					) : (
+						<Box
 							sx={{
-								color: 'white',
-								width: '100%',
-								justifyContent: 'flex-start',
-								pl: 2.5,
-								py: 1,
-							}}
-							startIcon={<NoteAddIcon />}>
-							Add New Column
-						</Button>
-					</Box>
+								minWidth: '230px',
+								maxWidth: '230px',
+								mx: 2,
+								borderRadius: '6px',
+								height: 'fit-content',
+								bgcolor: '#ffffff3d',
+							}}>
+							<Button
+								onClick={toggleNewColumnForm}
+								sx={{
+									color: 'white',
+									width: '100%',
+									justifyContent: 'flex-start',
+									pl: 2.5,
+									py: 1,
+								}}
+								startIcon={<NoteAddIcon />}>
+								Add New Column
+							</Button>
+						</Box>
+					)
 				) : (
 					<Box
 						sx={{

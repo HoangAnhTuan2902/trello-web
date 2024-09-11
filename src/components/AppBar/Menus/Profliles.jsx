@@ -1,18 +1,19 @@
 import { useState } from 'react';
 
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Skeleton from '@mui/material/Skeleton';
+import Tooltip from '@mui/material/Tooltip';
 
-function Profliles() {
+function Profliles({ isLoading }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -32,11 +33,20 @@ function Profliles() {
 					aria-controls={open ? 'basic-menu-profliles' : undefined}
 					aria-haspopup='true'
 					aria-expanded={open ? 'true' : undefined}>
-					<Avatar
-						sx={{ width: 36, height: 36 }}
-						alt='TuanDev'
-						src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-					/>
+					{isLoading ? (
+						<Skeleton
+							animation='wave'
+							variant='circular'
+							width={36}
+							height={36}
+						/>
+					) : (
+						<Avatar
+							sx={{ width: 36, height: 36 }}
+							alt='TuanDev'
+							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
+						/>
+					)}
 				</IconButton>
 			</Tooltip>
 			<Menu

@@ -1,21 +1,23 @@
 /* eslint-disable quotes */
 import { useState } from 'react';
 
+import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { loginAPI } from '~/apis';
-import validateEmail from '~/utils/validateEmail';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import { loginAPI } from '~/apis';
+import validateEmail from '~/utils/validateEmail';
+
 export default function Login({ setValue }) {
+	const [isLoading, setIsLoading] = useState(false);
 	const [loginData, setLoginData] = useState({
 		email: '',
 		password: '',
@@ -25,11 +27,13 @@ export default function Login({ setValue }) {
 
 	const handleSubmitLogin = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 
 		if (loginData.email === '' || loginData.password === '') {
 			toast.error('Please fill all fields', {
 				position: 'top-right',
 			});
+			setIsLoading(false);
 			return;
 		}
 
@@ -37,6 +41,7 @@ export default function Login({ setValue }) {
 			toast.error('Invalid email address', {
 				position: 'top-right',
 			});
+			setIsLoading(false);
 			return;
 		}
 
@@ -45,13 +50,15 @@ export default function Login({ setValue }) {
 			toast.success(res.message, {
 				position: 'top-right',
 			});
-			navigate('/board');
+			navigate('/boards');
+			setIsLoading(false);
 		}
 
 		if (res.statusCode === 422) {
 			toast.error('Invalid email or password', {
 				position: 'top-right',
 			});
+			setIsLoading(false);
 			return;
 		}
 	};
@@ -114,21 +121,22 @@ export default function Login({ setValue }) {
 						}
 						label='Remember me'
 					/>
-					<Button
+					<LoadingButton
 						onClick={(e) => handleSubmitLogin(e)}
 						fullWidth
 						variant='contained'
 						color='primary'
+						loading={isLoading}
 						sx={{ mb: 2 }}>
 						Login
-					</Button>
+					</LoadingButton>
 					<Grid
 						container
 						sx={{
 							justifyContent: 'flex-end',
 						}}>
 						{/* <Grid
-							item
+							
 							xs>
 							<Link
 								href='#'
@@ -136,7 +144,7 @@ export default function Login({ setValue }) {
 								Forgot password?
 							</Link>
 						</Grid> */}
-						<Grid item>
+						<Grid>
 							<Link
 								sx={{ cursor: 'pointer' }}
 								onClick={() => setValue('2')}

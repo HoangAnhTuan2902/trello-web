@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
+import Skeleton from '@mui/material/Skeleton';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';
 
@@ -27,7 +28,7 @@ const MENU_STYLES = {
 	},
 };
 
-function BoardBar({ board }) {
+function BoardBar({ board, isLoading }) {
 	return (
 		<Box
 			sx={{
@@ -43,20 +44,38 @@ function BoardBar({ board }) {
 				paddingX: 2,
 			}}>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-				<Tooltip title={board?.description}>
+				{isLoading ? (
+					<Skeleton
+						variant='rounded'
+						animation='wave'
+						width={120}
+						height={40}
+					/>
+				) : (
+					<Tooltip title={board?.description}>
+						<Chip
+							sx={MENU_STYLES}
+							icon={<DashboardIcon />}
+							label={board?.title}
+							clickable
+						/>
+					</Tooltip>
+				)}
+				{isLoading ? (
+					<Skeleton
+						variant='rounded'
+						animation='wave'
+						width={120}
+						height={40}
+					/>
+				) : (
 					<Chip
 						sx={MENU_STYLES}
-						icon={<DashboardIcon />}
-						label={board?.title}
+						icon={<VpnLockIcon />}
+						label={capitalizeFirstLetter(board?.type)}
 						clickable
 					/>
-				</Tooltip>
-				<Chip
-					sx={MENU_STYLES}
-					icon={<VpnLockIcon />}
-					label={capitalizeFirstLetter(board?.type)}
-					clickable
-				/>
+				)}
 				<Chip
 					sx={MENU_STYLES}
 					icon={<AddToDriveIcon />}
@@ -77,19 +96,28 @@ function BoardBar({ board }) {
 				/>
 			</Box>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-				<Button
-					startIcon={<PersonAddIcon />}
-					variant='outlined'
-					sx={{
-						color: 'white',
-						borderColor: 'white',
-						'&:hover': {
+				{isLoading ? (
+					<Skeleton
+						variant='rounded'
+						animation='wave'
+						width={100}
+						height={40}
+					/>
+				) : (
+					<Button
+						startIcon={<PersonAddIcon />}
+						variant='outlined'
+						sx={{
+							color: 'white',
 							borderColor: 'white',
-							boxShadow: '0 0 6px 1px #ecf0f1',
-						},
-					}}>
-					Invite
-				</Button>
+							'&:hover': {
+								borderColor: 'white',
+								boxShadow: '0 0 6px 1px #ecf0f1',
+							},
+						}}>
+						Invite
+					</Button>
+				)}
 				<AvatarGroup
 					sx={{
 						gap: 1.2,
@@ -106,78 +134,21 @@ function BoardBar({ board }) {
 						},
 					}}
 					max={6}>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
+					{isLoading ? (
+						<Skeleton
+							animation='wave'
+							variant='circular'
+							width={34}
+							height={34}
 						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
-					<Tooltip title='Tuan Dev'>
-						<Avatar
-							alt='Tuan Dev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
-						/>
-					</Tooltip>
+					) : (
+						<Tooltip title='Tuan Dev'>
+							<Avatar
+								alt='Tuan Dev'
+								src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
+							/>
+						</Tooltip>
+					)}
 				</AvatarGroup>
 			</Box>
 		</Box>

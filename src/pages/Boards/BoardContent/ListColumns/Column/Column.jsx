@@ -27,8 +27,9 @@ import { useConfirm } from 'material-ui-confirm';
 import { toast } from 'react-toastify';
 
 import ListCards from './ListCards/ListCards';
+import { Skeleton } from '@mui/material';
 
-function Column({ column, createNewCard, deleteColumnDetails }) {
+function Column({ column, createNewCard, deleteColumnDetails, isLoading }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [newCardTitle, setNewCardTitle] = useState('');
 	const [openNewCardForm, setOpenNewCardForm] = useState(false);
@@ -107,6 +108,8 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
 			})
 			.catch(() => {});
 	};
+	let CustomSkeleton = Skeleton;
+	isLoading ? (CustomSkeleton = Skeleton) : (CustomSkeleton = Box);
 
 	// bọc 1 thẻ div ở ngoài để tránh bug giật giật khi kéo columns
 	return (
@@ -114,7 +117,7 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
 			ref={setNodeRef}
 			style={dndKitColumnStyles}
 			{...attributes}>
-			<Box
+			<CustomSkeleton
 				{...listeners}
 				sx={{
 					minWidth: 300,
@@ -329,7 +332,7 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
 						</Box>
 					)}
 				</Box>
-			</Box>
+			</CustomSkeleton>
 		</div>
 	);
 }

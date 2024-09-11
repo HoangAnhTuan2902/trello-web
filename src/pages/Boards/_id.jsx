@@ -1,12 +1,10 @@
 // Board Details
 import Container from '@mui/material/Container';
-import { isEmpty } from 'lodash';
 
-import AppBar from '~/components/AppBar/AppBar';
-import BoardBar from './BoardBar/BoardBar';
-import BoardContent from './BoardContent/BoardContent';
-// import { mockData } from '~/apis/mock-data';
+import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
 import {
 	createNewCardAPI,
 	createNewColumnAPI,
@@ -16,35 +14,55 @@ import {
 	updateBoardDetailsAPI,
 	updateColumnDetailsAPI,
 } from '~/apis';
+import AppBar from '~/components/AppBar/AppBar';
 import { generatePlaceholderCard } from '~/utils/formatters';
 import { mapOrder } from '~/utils/sorts';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import { toast } from 'react-toastify';
+import BoardBar from './BoardBar/BoardBar';
+import BoardContent from './BoardContent/BoardContent';
+import { useNavigate } from 'react-router-dom';
 
 function Board() {
 	const [board, setBoard] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		const boardId = '66d7cfc6633d62486c60be2a';
-		fetchBoardDetailsAPI(boardId).then((board) => {
-			// sắp xếp column trước khi đưa dữ liệu xuống comlonent con
-			board.columns = mapOrder(board.columns, board.columnOrderIds, '_id');
+		const boardId = '66dfef9c114ada1d9ac8a671';
 
-			board.columns.forEach((column) => {
-				if (isEmpty(column.cards)) {
-					column.cards = [generatePlaceholderCard(column)];
-					column.cardOrderIds = [column.cards[0]._id];
-				} else {
-					// sắp xếp card trước khi đưa dữ liệu xuống comlonent con
-					column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id');
-				}
-			});
-			// console.log('full board', board);
+		const loadBoardData = async () => {
+			try {
+				const board = await fetchBoardDetailsAPI(boardId);
 
-			setBoard(board);
-		});
-	}, []);
+				// Sắp xếp các cột theo `columnOrderIds`
+				board.columns = mapOrder(board.columns, board.columnOrderIds, '_id');
+
+				board.columns.forEach((column) => {
+					if (isEmpty(column.cards)) {
+						// Thêm placeholder nếu cột không có card
+						column.cards = [generatePlaceholderCard(column)];
+						column.cardOrderIds = [column.cards[0]._id];
+					} else {
+						// Sắp xếp các card theo `cardOrderIds`
+						column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id');
+					}
+				});
+
+				setBoard(board);
+
+				// Đặt loading timeout
+				setTimeout(() => {
+					setIsLoading(false);
+				}, 1000);
+			} catch (error) {
+				navigate('/user/login'); // Redirect nếu xảy ra lỗi
+			}
+		};
+
+		loadBoardData();
+
+		// Cleanup setTimeout nếu component unmount
+		return () => clearTimeout();
+	}, [navigate]); // Thêm `navigate` vào dependency array nếu bạn sử dụng nó
 
 	const createNewColumn = async (newColumnData) => {
 		const createdColumn = await createNewColumnAPI({
@@ -178,35 +196,59 @@ function Board() {
 	};
 
 	return (
+		// <Container
+		// 	disableGutters
+		// 	maxWidth={false}
+		// 	sx={{ height: '100vh' }}>
+		// 	{!board ? (
+		// 		<Box
+		// 			sx={{
+		// 				display: 'flex',
+		// 				alignItems: 'center',
+		// 				justifyContent: 'center',
+		// 				height: (theme) => theme.trello.boardContentHeight,
+		// 			}}>
+		// 			<CircularProgress />
+		// 		</Box>
+		// 	) : (
+		// 		<>
+		// 			<AppBar />
+		// 			<BoardBar
+		// 				board={board}
+		// 				isLoading={isLoading}
+		// 			/>
+		// 			<BoardContent
+		// 				isLoading={isLoading}
+		// 				board={board}
+		// 				moveColumn={moveColumn}
+		// 				createNewCard={createNewCard}
+		// 				createNewColumn={createNewColumn}
+		// 				deleteColumnDetails={deleteColumnDetails}
+		// 				moveCardInTheSameColumn={moveCardInTheSameColumn}
+		// 				moveCardToDifferentColumn={moveCardToDifferentColumn}
+		// 			/>
+		// 		</>
+		// 	)}
+		// </Container>
 		<Container
 			disableGutters
 			maxWidth={false}
 			sx={{ height: '100vh' }}>
-			<AppBar />
-			{!board ? (
-				<Box
-					sx={{
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-						height: (theme) => theme.trello.boardContentHeight,
-					}}>
-					<CircularProgress />
-				</Box>
-			) : (
-				<>
-					<BoardBar board={board} />
-					<BoardContent
-						board={board}
-						moveColumn={moveColumn}
-						createNewCard={createNewCard}
-						createNewColumn={createNewColumn}
-						deleteColumnDetails={deleteColumnDetails}
-						moveCardInTheSameColumn={moveCardInTheSameColumn}
-						moveCardToDifferentColumn={moveCardToDifferentColumn}
-					/>
-				</>
-			)}
+			<AppBar isLoading={isLoading} />
+			<BoardBar
+				board={board}
+				isLoading={isLoading}
+			/>
+			<BoardContent
+				isLoading={isLoading}
+				board={board}
+				moveColumn={moveColumn}
+				createNewCard={createNewCard}
+				createNewColumn={createNewColumn}
+				deleteColumnDetails={deleteColumnDetails}
+				moveCardInTheSameColumn={moveCardInTheSameColumn}
+				moveCardToDifferentColumn={moveCardToDifferentColumn}
+			/>
 		</Container>
 	);
 }

@@ -50,3 +50,8 @@ export const registerAPI = async (registerData) => {
 	const res = await axios.post('/v1/auth/register', registerData);
 	return res;
 };
+
+export const checkAuthAPI = async () => {
+	const res = await axios.get('/v1/auth/check');
+	return res;
+};

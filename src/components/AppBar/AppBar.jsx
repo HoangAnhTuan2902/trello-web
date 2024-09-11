@@ -23,7 +23,7 @@ import Workspaces from './Menus/Workspaces';
 
 import SearchIcon from '@mui/icons-material/Search';
 
-function AppBar() {
+function AppBar({ isLoading }) {
 	const [searchValue, setSearchValue] = useState('');
 
 	return (
@@ -131,7 +131,7 @@ function AppBar() {
 					sx={{ cursor: 'pointer' }}>
 					<HelpOutlineIcon sx={{ cursor: 'pointer', color: 'white' }} />
 				</Tooltip>
-				<Profliles />
+				<Profliles isLoading={isLoading} />
 			</Box>
 		</Box>
 	);

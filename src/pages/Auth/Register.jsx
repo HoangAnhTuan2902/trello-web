@@ -1,7 +1,7 @@
+import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import Grid2 from '@mui/material/Grid2';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -11,8 +11,9 @@ import { registerAPI } from '~/apis';
 import validateEmail from '~/utils/validateEmail';
 
 export default function Register({ setValue }) {
+	const [isLoading, setIsLoading] = useState(false);
 	const [registerData, setRegisterData] = useState({
-		fullName: '',
+		fullname: '',
 		username: '',
 		password: '',
 		email: '',
@@ -20,8 +21,9 @@ export default function Register({ setValue }) {
 
 	const handleSubmitRegister = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		if (
-			registerData.fullName === '' ||
+			registerData.fullname === '' ||
 			registerData.username === '' ||
 			registerData.password === '' ||
 			registerData.email === ''
@@ -29,12 +31,14 @@ export default function Register({ setValue }) {
 			toast.error('Please fill all fields', {
 				position: 'top-right',
 			});
+			setIsLoading(false);
 			return;
 		}
 		if (!validateEmail(registerData.email)) {
 			toast.error('Invalid email address', {
 				position: 'top-right',
 			});
+			setIsLoading(false);
 			return;
 		}
 
@@ -43,9 +47,11 @@ export default function Register({ setValue }) {
 			toast.error(res.message, {
 				position: 'top-right',
 			});
+			setIsLoading(false);
 		}
+		console.log('res', res);
 
-		if (res.success) {
+		if (res.status === 201) {
 			toast.success(res.message, {
 				position: 'top-right',
 			});
@@ -72,13 +78,10 @@ export default function Register({ setValue }) {
 					component='form'
 					sx={{ width: '100%', marginTop: 3 }}
 					noValidate>
-					<Grid
+					<Grid2
 						container
 						spacing={2}>
-						<Grid
-							item
-							xs={12}
-							sm={6}>
+						<Grid2 size={6}>
 							<TextField
 								autoComplete='fname'
 								variant='standard'
@@ -87,16 +90,13 @@ export default function Register({ setValue }) {
 								id='firstName'
 								label='Full Name'
 								autoFocus
-								value={registerData.fullName}
+								value={registerData.fullname}
 								onChange={(e) =>
-									setRegisterData({ ...registerData, fullName: e.target.value })
+									setRegisterData({ ...registerData, fullname: e.target.value })
 								}
 							/>
-						</Grid>
-						<Grid
-							item
-							xs={12}
-							sm={6}>
+						</Grid2>
+						<Grid2 size={6}>
 							<TextField
 								variant='standard'
 								required
@@ -108,10 +108,8 @@ export default function Register({ setValue }) {
 									setRegisterData({ ...registerData, username: e.target.value })
 								}
 							/>
-						</Grid>
-						<Grid
-							item
-							xs={12}>
+						</Grid2>
+						<Grid2 size={12}>
 							<TextField
 								variant='standard'
 								required
@@ -124,10 +122,8 @@ export default function Register({ setValue }) {
 									setRegisterData({ ...registerData, email: e.target.value })
 								}
 							/>
-						</Grid>
-						<Grid
-							item
-							xs={12}>
+						</Grid2>
+						<Grid2 size={12}>
 							<TextField
 								variant='standard'
 								required
@@ -141,28 +137,29 @@ export default function Register({ setValue }) {
 									setRegisterData({ ...registerData, password: e.target.value })
 								}
 							/>
-						</Grid>
-					</Grid>
-					<Button
+						</Grid2>
+					</Grid2>
+					<LoadingButton
 						onClick={(e) => handleSubmitRegister(e)}
 						fullWidth
 						variant='contained'
 						color='primary'
+						loading={isLoading}
 						sx={{ mt: 3, mb: 2 }}>
 						Sign Up
-					</Button>
-					<Grid
+					</LoadingButton>
+					<Grid2
 						container
 						justifyContent='flex-end'>
-						<Grid item>
+						<Grid2>
 							<Link
 								sx={{ cursor: 'pointer' }}
 								onClick={() => setValue('1')}
 								variant='caption'>
 								Already have an account? Register
 							</Link>
-						</Grid>
-					</Grid>
+						</Grid2>
+					</Grid2>
 				</Box>
 			</Box>
 		</Container>
