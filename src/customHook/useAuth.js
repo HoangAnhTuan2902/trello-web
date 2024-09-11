@@ -1,32 +1,35 @@
 // src/hooks/useAuth.js
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkAuthAPI } from '~/apis';
+import { setIsAuthenticated, setUser } from './userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const useAuth = () => {
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const [user, setUser] = useState(null);
 	const navigate = useNavigate();
+	const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+	const user = useSelector((state) => state.user.user);
 
+	const dispatch = useDispatch();
 	useEffect(() => {
 		const checkAuthStatus = async () => {
 			try {
 				const response = await checkAuthAPI();
 				if (response?.status === 200) {
-					setIsAuthenticated(true);
-					setUser(response.user); // Lưu thông tin người dùng
+					dispatch(setIsAuthenticated(true));
+					dispatch(setUser(response.user)); // Lưu thông tin người dùng
 				} else {
-					setIsAuthenticated(false);
+					dispatch(setIsAuthenticated(false));
 					navigate('/user/login'); // Redirect nếu không đăng nhập
 				}
 			} catch (error) {
-				setIsAuthenticated(false);
+				dispatch(setIsAuthenticated(false));
 				navigate('/user/login');
 			}
 		};
 
 		checkAuthStatus();
-	}, [navigate]);
+	}, [dispatch, navigate]);
 
 	return { isAuthenticated, user };
 };

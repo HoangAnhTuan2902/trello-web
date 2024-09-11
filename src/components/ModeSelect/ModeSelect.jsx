@@ -39,23 +39,43 @@ function ModeSelect() {
 					color: 'white',
 					'.MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
 					'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
-					'&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+					'&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+						borderColor: 'white',
+					},
 					'.MuiSvgIcon-root': { color: 'white' },
 				}}>
 				<MenuItem value='light'>
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'flex-start' }}>
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							gap: 1,
+							justifyContent: 'flex-start',
+						}}>
 						<LightModeIcon fontSize='16' />
 						Light
 					</Box>
 				</MenuItem>
 				<MenuItem value='dark'>
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'flex-start' }}>
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							gap: 1,
+							justifyContent: 'flex-start',
+						}}>
 						<DarkModeIcon fontSize='16' />
 						Dark
 					</Box>
 				</MenuItem>
 				<MenuItem value='system'>
-					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'flex-start' }}>
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							gap: 1,
+							justifyContent: 'flex-start',
+						}}>
 						<SettingsBrightnessIcon fontSize='16' />
 						System
 					</Box>

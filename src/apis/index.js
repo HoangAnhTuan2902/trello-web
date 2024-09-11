@@ -1,3 +1,4 @@
+import cloundinaryAxios from '~/apis/axiosCloudinaryConfig';
 import axios from '~/apis/axiosConfig';
 // import { API_ROOT } from '~/utils/constants';
 
@@ -53,5 +54,16 @@ export const registerAPI = async (registerData) => {
 
 export const checkAuthAPI = async () => {
 	const res = await axios.get('/v1/auth/check');
+	return res;
+};
+
+/** upload images */
+export const uploadAvatarAPI = async (avatar) => {
+	const data = new FormData();
+	data.append('file', avatar);
+	data.append('upload_preset', 'upload-preset');
+
+	const res = await cloundinaryAxios.post('/image/upload', data);
+
 	return res;
 };

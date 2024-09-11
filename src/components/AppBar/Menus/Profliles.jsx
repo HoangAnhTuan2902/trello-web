@@ -13,9 +13,14 @@ import MenuItem from '@mui/material/MenuItem';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 
+import { useSelector } from 'react-redux';
+
 function Profliles({ isLoading }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
+
+	const user = useSelector((state) => state.user.user);
+
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -43,8 +48,8 @@ function Profliles({ isLoading }) {
 					) : (
 						<Avatar
 							sx={{ width: 36, height: 36 }}
-							alt='TuanDev'
-							src='https://res.cloudinary.com/dmjafhfiu/image/upload/v1725001471/z4332691207128_8766e90860547379f456c2ab9d9a7585_vb6ycu.jpg'
+							alt={user?.name}
+							src={user?.avatar}
 						/>
 					)}
 				</IconButton>
