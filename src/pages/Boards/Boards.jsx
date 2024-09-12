@@ -11,7 +11,7 @@ function Boards() {
 		<Container
 			disableGutters
 			maxWidth={false}
-			sx={{ height: '100vh' }}>
+			sx={{ height: (theme) => `calc(100vh - ${theme.trello.appBarHeight})` }}>
 			{!params.boardId ? <p>Boards list</p> : <Outlet />}
 		</Container>
 	);

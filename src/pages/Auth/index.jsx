@@ -4,18 +4,18 @@ import { useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import Typography from '@mui/material/Typography';
-import SvgIcon from '@mui/material/SvgIcon';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
+import SvgIcon from '@mui/material/SvgIcon';
 import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 import { ReactComponent as LoginIcon } from '~/assets/login.svg';
 import { ReactComponent as RegisterIcon } from '~/assets/register.svg';
-import Register from './Register';
+import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 import Login from './Login';
+import Register from './Register';
 
 function Auth() {
 	const [value, setValue] = useState('1');

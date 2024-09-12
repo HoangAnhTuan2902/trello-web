@@ -20,20 +20,19 @@ const theme = extendTheme({
 	},
 	// colorSchemes: {
 	// 	light: {
-	// 		palette: {
-	// 			primary: lightBlue,
-	// 			secondary: deepOrange,
-	// 		},
+	// 		// palette: {
+	// 		// 	primary: lightBlue,
+	// 		// 	secondary: deepOrange,
+	// 		// },
 	// 	},
 	// 	dark: {
-	// 		palette: {
-	// 			primary: cyan,
-	// 			secondary: orange,
-	// 		},
+	// 		// palette: {
+	// 		// 	primary: cyan,
+	// 		// 	secondary: orange,
+	// 		// },
 	// 	},
 	// },
 	components: {
-		// Name of the component
 		MuiCssBaseline: {
 			styleOverrides: {
 				body: {

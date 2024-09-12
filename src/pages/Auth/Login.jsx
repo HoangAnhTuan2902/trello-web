@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -50,7 +50,7 @@ export default function Login({ setValue }) {
 			toast.success(res.message, {
 				position: 'top-right',
 			});
-			navigate('/root');
+			navigate('/root/boards');
 			setIsLoading(false);
 		}
 

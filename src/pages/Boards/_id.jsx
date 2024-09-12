@@ -5,6 +5,8 @@ import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { useNavigate } from 'react-router-dom';
+
 import {
 	createNewCardAPI,
 	createNewColumnAPI,
@@ -14,12 +16,10 @@ import {
 	updateBoardDetailsAPI,
 	updateColumnDetailsAPI,
 } from '~/apis';
-import AppBar from '~/components/AppBar/AppBar';
 import { generatePlaceholderCard } from '~/utils/formatters';
 import { mapOrder } from '~/utils/sorts';
 import BoardBar from './BoardBar/BoardBar';
 import BoardContent from './BoardContent/BoardContent';
-import { useNavigate } from 'react-router-dom';
 
 function Board() {
 	const [board, setBoard] = useState(null);
@@ -233,7 +233,7 @@ function Board() {
 		<Container
 			disableGutters
 			maxWidth={false}
-			sx={{ height: '100vh' }}>
+			sx={{ height: (theme) => `calc(100vh - ${theme.trello.appBarHeight})` }}>
 			<BoardBar
 				board={board}
 				isLoading={isLoading}

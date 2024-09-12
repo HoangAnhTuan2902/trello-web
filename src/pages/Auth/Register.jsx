@@ -2,7 +2,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Grid2 from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -121,11 +121,7 @@ export default function Register({ setValue }) {
 			component='main'
 			maxWidth='xs'>
 			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-				}}>
+				sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 				<Typography
 					component='h1'
 					variant='h5'>
@@ -135,10 +131,12 @@ export default function Register({ setValue }) {
 					component='form'
 					sx={{ width: '100%', marginTop: 3 }}
 					noValidate>
-					<Grid2
+					<Grid
 						container
 						spacing={2}>
-						<Grid2 size={6}>
+						<Grid
+							item
+							xs={6}>
 							<TextField
 								autoComplete='fname'
 								variant='standard'
@@ -152,8 +150,10 @@ export default function Register({ setValue }) {
 									setRegisterData({ ...registerData, fullname: e.target.value })
 								}
 							/>
-						</Grid2>
-						<Grid2 size={6}>
+						</Grid>
+						<Grid
+							item
+							xs={6}>
 							<TextField
 								variant='standard'
 								required
@@ -165,8 +165,10 @@ export default function Register({ setValue }) {
 									setRegisterData({ ...registerData, username: e.target.value })
 								}
 							/>
-						</Grid2>
-						<Grid2 size={12}>
+						</Grid>
+						<Grid
+							item
+							xs={12}>
 							<TextField
 								variant='standard'
 								required
@@ -179,8 +181,10 @@ export default function Register({ setValue }) {
 									setRegisterData({ ...registerData, email: e.target.value })
 								}
 							/>
-						</Grid2>
-						<Grid2 size={12}>
+						</Grid>
+						<Grid
+							item
+							xs={12}>
 							<TextField
 								variant='standard'
 								required
@@ -194,8 +198,8 @@ export default function Register({ setValue }) {
 									setRegisterData({ ...registerData, password: e.target.value })
 								}
 							/>
-						</Grid2>
-						<Grid2>
+						</Grid>
+						<Grid item>
 							<LoadingButton
 								component='label'
 								role={undefined}
@@ -208,15 +212,15 @@ export default function Register({ setValue }) {
 									onChange={(e) => handleSetImage(e.target.files[0])}
 								/>
 							</LoadingButton>
-						</Grid2>
+						</Grid>
 						{previeImage ? (
-							<Grid2>
+							<Grid item>
 								<Img src={previeImage} />
-							</Grid2>
+							</Grid>
 						) : (
 							''
 						)}
-					</Grid2>
+					</Grid>
 					<LoadingButton
 						onClick={(e) => handleSubmitRegister(e)}
 						fullWidth
@@ -226,18 +230,18 @@ export default function Register({ setValue }) {
 						sx={{ mt: 3, mb: 2 }}>
 						Sign Up
 					</LoadingButton>
-					<Grid2
+					<Grid
 						container
 						justifyContent='flex-end'>
-						<Grid2>
+						<Grid item>
 							<Link
 								sx={{ cursor: 'pointer' }}
 								onClick={() => setValue('1')}
 								variant='caption'>
 								Already have an account? Register
 							</Link>
-						</Grid2>
-					</Grid2>
+						</Grid>
+					</Grid>
 				</Box>
 			</Box>
 		</Container>

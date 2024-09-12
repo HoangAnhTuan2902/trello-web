@@ -1,10 +1,9 @@
-import ReactDOM from 'react-dom/client';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
+import ReactDOM from 'react-dom/client';
 
-import theme from '~/theme.js';
 import App from '~/App.jsx';
+import theme from '~/theme.js';
 import store from './redux/store';
 
 import { ToastContainer } from 'react-toastify';
