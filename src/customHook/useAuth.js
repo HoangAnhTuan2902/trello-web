@@ -15,6 +15,7 @@ const useAuth = () => {
 		const checkAuthStatus = async () => {
 			try {
 				const response = await checkAuthAPI();
+
 				if (response?.status === 200) {
 					dispatch(setIsAuthenticated(true));
 					dispatch(setUser(response.user)); // Lưu thông tin người dùng

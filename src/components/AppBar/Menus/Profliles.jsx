@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
@@ -14,10 +16,14 @@ import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 
 import { useSelector } from 'react-redux';
+import { logoutAPI } from '~/apis';
+import { toast } from 'react-toastify';
 
 function Profliles({ isLoading }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
+
+	const navigate = useNavigate();
 
 	const user = useSelector((state) => state.user.user);
 
@@ -26,6 +32,13 @@ function Profliles({ isLoading }) {
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+	const hanldeLogOut = async () => {
+		navigate('/user');
+		toast.success('Logout Successfully', {
+			position: 'top-right',
+		});
+		await logoutAPI();
 	};
 
 	return (
@@ -81,7 +94,7 @@ function Profliles({ isLoading }) {
 					</ListItemIcon>
 					Settings
 				</MenuItem>
-				<MenuItem onClick={handleClose}>
+				<MenuItem onClick={hanldeLogOut}>
 					<ListItemIcon>
 						<Logout fontSize='small' />
 					</ListItemIcon>

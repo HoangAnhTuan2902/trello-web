@@ -46,6 +46,11 @@ export const loginAPI = async (loginData) => {
 	return res;
 };
 
+/** Logout */
+export const logoutAPI = async () => {
+	const res = await axios.post('/v1/auth/logout');
+	return res;
+};
 /** Register */
 export const registerAPI = async (registerData) => {
 	const res = await axios.post('/v1/auth/register', registerData);
