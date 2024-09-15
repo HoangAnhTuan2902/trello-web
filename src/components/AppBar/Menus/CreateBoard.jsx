@@ -1,22 +1,34 @@
-import CheckIcon from '@mui/icons-material/Check'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
-import { Box, Card, CardMedia, FormControl, Grid, Select, TextField } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CardMedia from '@mui/material/CardMedia'
+import FormControl from '@mui/material/FormControl'
+import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
+import Select from '@mui/material/Select'
 import Stack from '@mui/material/Stack'
 import SvgIcon from '@mui/material/SvgIcon'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
 import { useState } from 'react'
 
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+
+import { createNewBoardAPI } from '~/apis'
 import { ReactComponent as PrevireBgIcon } from '~/assets/preview-bg.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
+import { addBoard } from '~/pages/Boards/boardsSlice'
 
 const images = [
   {
@@ -35,14 +47,41 @@ const images = [
 ]
 
 const NestedMenu = () => {
+  const [loading, setLoading] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
-  const [currentMenu, setCurrentMenu] = useState('main') // 'main' hoặc 'submenu'
+  const [currentMenu, setCurrentMenu] = useState('main')
   const [previousMenu, setPreviousMenu] = useState(null)
   const [selectedImage, setSelectedImage] = useState(0)
-  const [boardData, setBoardData] = useState({ bgImage: '', title: '', role: 'private', description: '' })
+  const [boardData, setBoardData] = useState({
+    bgImage: images[selectedImage].src,
+    title: '',
+    type: 'private',
+    description: '',
+  })
+  const dispatch = useDispatch()
+
+  const handleCreateBoard = async () => {
+    try {
+      setLoading(true)
+      const res = await createNewBoardAPI(boardData)
+
+      if (res.status === 201) {
+        const data = res.createdBoard
+        dispatch(addBoard(data))
+        toast.success(res.message, { position: 'top-right' })
+      } else {
+        toast.error('Failed to create board', { position: 'top-right' })
+      }
+      closeMenu()
+    } catch (error) {
+      toast.error(error.message || 'An error occurred', { position: 'top-right' })
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleChangeRole = (event) => {
-    setBoardData((prev) => ({ ...prev, role: event.target.value }))
+    setBoardData((prev) => ({ ...prev, type: event.target.value }))
   }
   const handleChangeTitle = (event) => {
     setBoardData((prev) => ({ ...prev, title: event.target.value }))
@@ -66,7 +105,7 @@ const NestedMenu = () => {
   const closeMenu = () => {
     setAnchorEl(null)
     setCurrentMenu('main')
-    setBoardData({ bgImage: '', title: '', role: '', description: '' })
+    setBoardData({ bgImage: images[selectedImage].src, title: '', type: 'private', description: '' })
   }
 
   const handleMenuClick = (menu) => {
@@ -76,7 +115,7 @@ const NestedMenu = () => {
 
   const handleBack = () => {
     setCurrentMenu(previousMenu) // Quay lại menu trước đó
-    setBoardData({ bgImage: '', title: '', role: 'public', description: '' })
+    setBoardData({ bgImage: images[selectedImage].src, title: '', type: 'private', description: '' })
   }
 
   const toggleButtonSx = {
@@ -211,8 +250,8 @@ const NestedMenu = () => {
               <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
                 Role
               </Typography>
-              <FormControl fullWidth error={!boardData.role}>
-                <Select size="small" id="demo-simple-select" value={boardData.role} onChange={handleChangeRole}>
+              <FormControl fullWidth error={!boardData.type}>
+                <Select size="small" id="demo-simple-select" value={boardData.type} onChange={handleChangeRole}>
                   <MenuItem value={'public'}>public</MenuItem>
                   <MenuItem value={'private'}>private</MenuItem>
                 </Select>
@@ -234,14 +273,16 @@ const NestedMenu = () => {
               helperText={!boardData.description ? 'This field is required' : ''}
             />
           </Box>
-          <Button
-            disabled={boardData.title && boardData.description && boardData.role ? false : true}
+          <LoadingButton
+            loading={loading}
+            onClick={handleCreateBoard}
+            disabled={boardData.title && boardData.description && boardData.type ? false : true}
             sx={{ mt: 1 }}
             variant="contained"
             fullWidth
           >
             Create
-          </Button>
+          </LoadingButton>
         </Box>,
       ]
     }

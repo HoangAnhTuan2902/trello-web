@@ -9,9 +9,10 @@ import AvatarGroup from '@mui/material/AvatarGroup'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import Tooltip from '@mui/material/Tooltip'
 import Skeleton from '@mui/material/Skeleton'
+import Tooltip from '@mui/material/Tooltip'
 
+import { useSelector } from 'react-redux'
 import { capitalizeFirstLetter } from '~/utils/formatters'
 
 const MENU_STYLES = {
@@ -28,7 +29,9 @@ const MENU_STYLES = {
   },
 }
 
-function BoardBar({ board, isLoading }) {
+function BoardBar({ isLoading }) {
+  const board = useSelector((state) => state.boardsSlice.board)
+
   return (
     <Box
       sx={{

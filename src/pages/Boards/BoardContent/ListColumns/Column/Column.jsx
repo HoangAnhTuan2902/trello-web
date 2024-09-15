@@ -28,11 +28,17 @@ import { toast } from 'react-toastify'
 
 import { Skeleton } from '@mui/material'
 import ListCards from './ListCards/ListCards'
+import { useDispatch, useSelector } from 'react-redux'
+import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { cloneDeep } from 'lodash'
+import { setBoard } from '~/pages/Boards/boardsSlice'
 
-function Column({ column, createNewCard, deleteColumnDetails, isLoading }) {
+function Column({ column, isLoading }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [newCardTitle, setNewCardTitle] = useState('')
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
+  const dispatch = useDispatch()
+  const board = useSelector((state) => state.boardsSlice.board)
 
   const open = Boolean(anchorEl)
 
@@ -57,6 +63,27 @@ function Column({ column, createNewCard, deleteColumnDetails, isLoading }) {
     // gọi API tạo mới column
     setNewCardTitle('')
     setOpenNewCardForm((prev) => !prev)
+  }
+
+  const createNewCard = async (newCardData) => {
+    const createdCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board._id,
+    })
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find((column) => column._id === createdCard.columnId)
+    if (columnToUpdate) {
+      // nếu column rỗng (chứa placeholder-card)
+      if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
+    }
+
+    dispatch(setBoard(newBoard))
   }
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -84,6 +111,19 @@ function Column({ column, createNewCard, deleteColumnDetails, isLoading }) {
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  // xóa 1 column và card bên trong
+  const deleteColumnDetails = (columnId) => {
+    // update state phía client
+    const newBoard = cloneDeep(board)
+    newBoard.columns = newBoard.columns.filter((column) => column._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter((_id) => _id !== columnId)
+    dispatch(setBoard(newBoard))
+    //gọi API
+    deleteColumnDetailsAPI(columnId).then((res) => {
+      toast.success(res?.deleteResult)
+    })
   }
 
   // xử lý xóa column và các card trong column

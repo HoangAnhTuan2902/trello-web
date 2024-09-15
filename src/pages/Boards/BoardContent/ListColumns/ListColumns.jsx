@@ -9,10 +9,17 @@ import { toast } from 'react-toastify'
 
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { useState } from 'react'
+import { createNewColumnAPI } from '~/apis'
+import { generatePlaceholderCard } from '~/utils/formatters'
+import { cloneDeep } from 'lodash'
+import { setBoard } from '../../boardsSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
-function ListColumns({ isLoading, columns, createNewColumn, createNewCard, deleteColumnDetails }) {
+function ListColumns({ isLoading, columns }) {
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
+  const dispatch = useDispatch()
+  const board = useSelector((state) => state.boardsSlice.board)
 
   const toggleNewColumnForm = () => {
     setNewColumnTitle('')
@@ -30,6 +37,22 @@ function ListColumns({ isLoading, columns, createNewColumn, createNewCard, delet
     createNewColumn(newColumnData)
     setNewColumnTitle('')
     setOpenNewColumnForm((prev) => !prev)
+  }
+
+  const createNewColumn = async (newColumnData) => {
+    const createdColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board._id,
+    })
+
+    // xử lý kéo thả card vào 1 column rỗng
+    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+    createdColumn.cardOrderIds = [createdColumn.cards[0]._id]
+
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    dispatch(setBoard(newBoard))
   }
 
   return (
@@ -57,13 +80,7 @@ function ListColumns({ isLoading, columns, createNewColumn, createNewCard, delet
       >
         {/* Loading Skeleton for Columns */}
         {columns?.map((column) => (
-          <Column
-            key={column._id}
-            isLoading={isLoading}
-            deleteColumnDetails={deleteColumnDetails}
-            createNewCard={createNewCard}
-            column={column}
-          />
+          <Column key={column._id} isLoading={isLoading} column={column} />
         ))}
 
         {/* Box to add new column */}

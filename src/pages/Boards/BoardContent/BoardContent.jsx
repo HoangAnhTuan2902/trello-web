@@ -20,8 +20,11 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { moveCardToDifferentColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndkitSensors'
 import { generatePlaceholderCard } from '~/utils/formatters'
+import { setBoard } from '../boardsSlice'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 
@@ -30,16 +33,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 }
 
-function BoardContent({
-  isLoading,
-  board,
-  createNewColumn,
-  createNewCard,
-  moveColumn,
-  moveCardInTheSameColumn,
-  moveCardToDifferentColumn,
-  deleteColumnDetails,
-}) {
+function BoardContent({ isLoading }) {
   const [orderedColumns, setOrderedColumns] = useState([])
   // cùng 1 thời điểm chỉ có 1 phần tử được kéo (column hoặc card)
   const [activeDragItemId, setActiveDragItemId] = useState(null)
@@ -47,8 +41,44 @@ function BoardContent({
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null)
 
+  const dispatch = useDispatch()
+
+  const board = useSelector((state) => state.boardsSlice.board)
+
   // điểm va chạm cuối cùng trước đó
   const lastOverId = useRef(null)
+
+  // gọi API cập nhật vị trí column khi kéo thả
+  const moveColumn = (dndOrderedColumns) => {
+    // update state phía client
+    const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
+    const newBoard = cloneDeep(board)
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    dispatch(setBoard(newBoard))
+
+    // gọi API update vị trí column
+    updateBoardDetailsAPI(board._id, {
+      columnOrderIds: dndOrderedColumnsIds,
+    })
+  }
+
+  // gọi API cập nhật cardOrderIds khi kéo thả card trong column chứa nó
+  const moveCardInTheSameColumn = (dndOrderedCards, dndOrderedCardIds, columnId) => {
+    // update state phía client
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find((column) => column._id === columnId)
+    if (columnToUpdate) {
+      columnToUpdate.cards = dndOrderedCards
+      columnToUpdate.cardOrderIds = dndOrderedCardIds
+    }
+    dispatch(setBoard(newBoard))
+
+    // gọi API update vị trí card trong column
+    updateColumnDetailsAPI(columnId, {
+      cardOrderIds: dndOrderedCardIds,
+    })
+  }
 
   useEffect(() => {
     if (board?.columns && board?.columnOrderIds) {
@@ -79,6 +109,34 @@ function BoardContent({
   // ưu tiên sử dụng kết hợp 2 loại sensors là MouseSensor và TouchSensor để có trải nghiệm mobile tốt nhất, không bị bug
   // const sensors = useSensors(pointerSensor);
   const sensors = useSensors(mouseSensor, touchSensor)
+
+  /**
+   * khi di chuyển card sang column khác:
+   * B1: cập nhật lại cardOrderIds của column cũ chứa nó
+   * B2: cập nhật lại cardOrderIds của column mới chứa nó
+   * B3: cập nhật lại columnId của card được kéo
+   */
+  const moveCardToDifferentColumn = async (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+    // update state phía client
+    const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    dispatch(setBoard(newBoard))
+
+    // gọi Api
+    let prevCardOrderIds = dndOrderedColumns.find((column) => column._id === prevColumnId)?.cardOrderIds || []
+    // xóa phần từ placeholder-card nếu có trong mảng cardOrderIds trước khi gửi dữ liệu lên BE
+    if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
+
+    moveCardToDifferentColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOrderedColumns.find((column) => column._id === nextColumnId)?.cardOrderIds,
+    })
+  }
 
   // Function chung xử lý việc kéo thả card giữa các column khác nhau
   const moveCardBetweenDifferentColumns = (
@@ -399,13 +457,7 @@ function BoardContent({
           height: (theme) => theme.trello.boardContentHeight,
         }}
       >
-        <ListColumns
-          isLoading={isLoading}
-          createNewCard={createNewCard}
-          createNewColumn={createNewColumn}
-          columns={orderedColumns}
-          deleteColumnDetails={deleteColumnDetails}
-        />
+        <ListColumns isLoading={isLoading} columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItemData} />}

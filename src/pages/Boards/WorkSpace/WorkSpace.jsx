@@ -7,13 +7,28 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { fetchFullBoardAPI } from '~/apis'
+import { setBoards } from '~/pages/Boards/boardsSlice'
 
 function WorkSpace() {
-  const [boards, setBoards] = useState([])
-  const [loading, setLoading] = useState(true) // Thêm state loading để theo dõi quá trình tải dữ liệu
+  // const [boards, setBoards] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const dispatch = useDispatch()
+  const boards = useSelector((state) => state.boardsSlice.boards)
+  console.log('boards', boards)
+
+  useEffect(() => {
+    const getFullBoard = async () => {
+      const result = await fetchFullBoardAPI()
+      dispatch(setBoards(result))
+      setLoading(false)
+    }
+    getFullBoard()
+  }, [dispatch])
 
   const typographySx = { fontSize: 14, fontWeight: '600', color: '#fff' }
   const cardSx = {
@@ -22,22 +37,13 @@ function WorkSpace() {
     minHeight: '90px',
     cursor: 'pointer',
     textDecoration: 'none',
-    // backgroundImage: 'url("https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg")',
+
     backgroundSize: 'cover', // Ensures the background image covers the card
     '&:hover': {
       bgcolor: (theme) => (theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : '#7f8c8d'),
       filter: 'brightness(80%)',
     },
   }
-
-  useEffect(() => {
-    const getFullBoard = async () => {
-      const result = await fetchFullBoardAPI()
-      setBoards(result)
-      setLoading(false)
-    }
-    getFullBoard()
-  }, [])
 
   return (
     <Box>
@@ -52,9 +58,15 @@ function WorkSpace() {
           ? [...Array(4)].map((_, index) => (
               <Skeleton key={index} sx={cardSx} variant="rounded" animation="wave"></Skeleton>
             ))
-          : boards.length > 0 &&
+          : Array.isArray(boards) &&
+            boards.length > 0 &&
             boards?.map((board) => (
-              <Card key={board._id} sx={cardSx} component={Link} to={`/root/boards/${board._id}`}>
+              <Card
+                key={board._id}
+                sx={{ ...cardSx, backgroundImage: `url(${board.bgImage})` }}
+                component={Link}
+                to={`/root/boards/${board._id}`}
+              >
                 <CardContent>
                   <Typography sx={typographySx} color="text.primary" gutterBottom>
                     {board.title}
