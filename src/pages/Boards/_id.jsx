@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import {
   createNewCardAPI,
@@ -25,13 +25,12 @@ function Board() {
   const [board, setBoard] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
+  const param = useParams()
 
   useEffect(() => {
-    const boardId = '66dfef9c114ada1d9ac8a671'
-
     const loadBoardData = async () => {
       try {
-        const board = await fetchBoardDetailsAPI(boardId)
+        const board = await fetchBoardDetailsAPI(param.boardId)
 
         // Sắp xếp các cột theo `columnOrderIds`
         board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
@@ -50,9 +49,7 @@ function Board() {
         setBoard(board)
 
         // Đặt loading timeout
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 1000)
+        setIsLoading(false)
       } catch (error) {
         navigate('/user/login') // Redirect nếu xảy ra lỗi
       }
@@ -62,7 +59,7 @@ function Board() {
 
     // Cleanup setTimeout nếu component unmount
     return () => clearTimeout()
-  }, [navigate]) // Thêm `navigate` vào dependency array nếu bạn sử dụng nó
+  }, [navigate, param.boardId]) // Thêm `navigate` vào dependency array nếu bạn sử dụng nó
 
   const createNewColumn = async (newColumnData) => {
     const createdColumn = await createNewColumnAPI({
@@ -175,7 +172,18 @@ function Board() {
   }
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: (theme) => `calc(100vh - ${theme.trello.appBarHeight})` }}>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{
+        height: (theme) => `calc(100vh - ${theme.trello.appBarHeight})`,
+        backgroundImage:
+          'url(https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?cs=srgb&dl=pexels-christian-heitz-285904-842711.jpg&fm=jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <BoardBar board={board} isLoading={isLoading} />
       <BoardContent
         isLoading={isLoading}

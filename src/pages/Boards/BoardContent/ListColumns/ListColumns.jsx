@@ -1,36 +1,36 @@
-import CloseIcon from '@mui/icons-material/Close';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Column from './Column/Column';
-import Skeleton from '@mui/material/Skeleton';
-import { toast } from 'react-toastify';
+import CloseIcon from '@mui/icons-material/Close'
+import NoteAddIcon from '@mui/icons-material/NoteAdd'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Column from './Column/Column'
+import Skeleton from '@mui/material/Skeleton'
+import { toast } from 'react-toastify'
 
-import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { useState } from 'react'
 
 function ListColumns({ isLoading, columns, createNewColumn, createNewCard, deleteColumnDetails }) {
-  const [newColumnTitle, setNewColumnTitle] = useState('');
-  const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
+  const [newColumnTitle, setNewColumnTitle] = useState('')
+  const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
 
   const toggleNewColumnForm = () => {
-    setNewColumnTitle('');
-    setOpenNewColumnForm((prev) => !prev);
-  };
+    setNewColumnTitle('')
+    setOpenNewColumnForm((prev) => !prev)
+  }
 
   const addNewColumn = () => {
     if (!newColumnTitle || newColumnTitle.trim().length < 3) {
-      toast.error('title phải có độ dài lớn hơn 3 ký tự');
-      return;
+      toast.error('title phải có độ dài lớn hơn 3 ký tự')
+      return
     }
     const newColumnData = {
       title: newColumnTitle,
-    };
-    createNewColumn(newColumnData);
-    setNewColumnTitle('');
-    setOpenNewColumnForm((prev) => !prev);
-  };
+    }
+    createNewColumn(newColumnData)
+    setNewColumnTitle('')
+    setOpenNewColumnForm((prev) => !prev)
+  }
 
   return (
     <SortableContext items={columns?.map((column) => column._id)} strategy={horizontalListSortingStrategy}>
@@ -174,7 +174,7 @@ function ListColumns({ isLoading, columns, createNewColumn, createNewCard, delet
         )}
       </Box>
     </SortableContext>
-  );
+  )
 }
 
-export default ListColumns;
+export default ListColumns

@@ -1,0 +1,282 @@
+import CheckIcon from '@mui/icons-material/Check'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import CloseIcon from '@mui/icons-material/Close'
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
+import { Box, Card, CardMedia, FormControl, Grid, Select, TextField } from '@mui/material'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import SvgIcon from '@mui/material/SvgIcon'
+import Typography from '@mui/material/Typography'
+
+import { useState } from 'react'
+
+import { ReactComponent as PrevireBgIcon } from '~/assets/preview-bg.svg'
+import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
+
+const images = [
+  {
+    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8SdsR9K6qNNxkExuSRl5RWtaas2EIeFLl8A&s',
+    alt: 'Image 1',
+  },
+  {
+    src: 'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?cs=srgb&dl=pexels-christian-heitz-285904-842711.jpg&fm=jpg',
+    alt: 'Image 2',
+  },
+  { src: 'https://images3.alphacoders.com/135/1350069.jpeg', alt: 'Image 3' },
+  {
+    src: 'https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-wallpaper-ultra-hd-wallpaper-4k-sr10012418-1706506236698-cover.webp',
+    alt: 'Image 4',
+  },
+]
+
+const NestedMenu = () => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [currentMenu, setCurrentMenu] = useState('main') // 'main' hoặc 'submenu'
+  const [previousMenu, setPreviousMenu] = useState(null)
+  const [selectedImage, setSelectedImage] = useState(0)
+  const [boardData, setBoardData] = useState({ bgImage: '', title: '', role: 'private', description: '' })
+
+  const handleChangeRole = (event) => {
+    setBoardData((prev) => ({ ...prev, role: event.target.value }))
+  }
+  const handleChangeTitle = (event) => {
+    setBoardData((prev) => ({ ...prev, title: event.target.value }))
+  }
+  const handleChangeDescription = (event) => {
+    setBoardData((prev) => ({ ...prev, description: event.target.value }))
+  }
+
+  const handleSelect = (index) => {
+    setSelectedImage(index)
+    setBoardData((prev) => ({
+      ...prev,
+      bgImage: images[selectedImage].src,
+    }))
+  }
+
+  const openMenu = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const closeMenu = () => {
+    setAnchorEl(null)
+    setCurrentMenu('main')
+    setBoardData({ bgImage: '', title: '', role: '', description: '' })
+  }
+
+  const handleMenuClick = (menu) => {
+    setPreviousMenu(currentMenu) // Lưu lại menu hiện tại
+    setCurrentMenu(menu)
+  }
+
+  const handleBack = () => {
+    setCurrentMenu(previousMenu) // Quay lại menu trước đó
+    setBoardData({ bgImage: '', title: '', role: 'public', description: '' })
+  }
+
+  const toggleButtonSx = {
+    border: 'none',
+    textTransform: 'none',
+    gap: 0.8,
+    justifyContent: 'flex-start',
+    borderRadius: '10px !important',
+    py: 0,
+  }
+  const CreateBoard = () => {
+    if (currentMenu === 'main') {
+      return [
+        <MenuItem key="menu1" onClick={() => handleMenuClick('submenu1')}>
+          <Button fullWidth sx={toggleButtonSx} value="list">
+            <SvgIcon fontSize="" component={TrelloIcon} inheritViewBox />
+            Board
+          </Button>
+        </MenuItem>,
+        <MenuItem key="menu2" onClick={() => handleMenuClick('submenu2')}>
+          <Button fullWidth sx={toggleButtonSx} value="list">
+            <SvgIcon fontSize="" component={TrelloIcon} inheritViewBox />
+            Start with samples
+          </Button>
+        </MenuItem>,
+      ]
+    }
+
+    if (currentMenu === 'submenu1') {
+      return [
+        <Stack
+          key="submenu1_item3"
+          sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 10, mx: 1 }}
+        >
+          <IconButton
+            size="small"
+            onClick={handleBack}
+            sx={{ '&:hover': { borderRadius: '8px', background: 'rgb(0 0 0 / 10%)' } }}
+          >
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+          <Typography>Create Board</Typography>
+          <IconButton
+            size="small"
+            onClick={closeMenu}
+            sx={{ '&:hover': { borderRadius: '8px', background: 'rgb(0 0 0 / 10%)' } }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Stack>,
+        <Stack
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          key={'submenu1_item1'}
+        >
+          <Paper
+            elevation={3}
+            sx={{
+              backgroundImage: `url(${images[selectedImage]?.src})`,
+              backgroundSize: 'cover',
+            }}
+          >
+            <SvgIcon
+              sx={{ fontSize: '200px', with: '186px', height: '103px', mt: 0.5 }}
+              inheritViewBox
+              component={PrevireBgIcon}
+            />
+          </Paper>
+        </Stack>,
+        <Box key={'submenu1_item2'} sx={{ p: 2 }}>
+          <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
+            Background
+          </Typography>
+          <Grid container spacing={1}>
+            {images.map((image, index) => (
+              <Grid item xs={3} key={index}>
+                <Card
+                  onClick={() => handleSelect(index)}
+                  sx={{
+                    borderRadius: 1,
+                    cursor: 'pointer',
+                    position: 'relative',
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={image.src}
+                    alt={image.alt}
+                    sx={{
+                      height: 50,
+                      objectFit: 'cover',
+                      filter: selectedImage === index ? 'brightness(80%)' : 'transparent',
+                    }}
+                  />
+                  {selectedImage === index && (
+                    <CheckIcon
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        right: '30%',
+                        transform: 'translate(-50% , -50%)',
+                        color: '#fff',
+                        fontSize: '1rem',
+                        textAlign: 'center',
+                      }}
+                    />
+                  )}
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+          <Grid container spacing={1}>
+            <Grid item xs={6} mt={2}>
+              <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
+                Title
+              </Typography>
+              <TextField
+                onChange={handleChangeTitle}
+                value={boardData.title}
+                fullWidth
+                size="small"
+                id="outlined-basic"
+                variant="outlined"
+                autoFocus
+                error={!boardData.title}
+                helperText={!boardData.title ? 'This field is required' : ''}
+              />
+            </Grid>
+            <Grid item xs={6} mt={2}>
+              <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
+                Role
+              </Typography>
+              <FormControl fullWidth error={!boardData.role}>
+                <Select size="small" id="demo-simple-select" value={boardData.role} onChange={handleChangeRole}>
+                  <MenuItem value={'public'}>public</MenuItem>
+                  <MenuItem value={'private'}>private</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Box key={'submenu1_item4'} mt={1}>
+            <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
+              Description
+            </Typography>
+            <TextField
+              onChange={handleChangeDescription}
+              value={boardData.description}
+              fullWidth
+              size="small"
+              id="outlined-basic"
+              variant="outlined"
+              error={!boardData.description}
+              helperText={!boardData.description ? 'This field is required' : ''}
+            />
+          </Box>
+          <Button
+            disabled={boardData.title && boardData.description && boardData.role ? false : true}
+            sx={{ mt: 1 }}
+            variant="contained"
+            fullWidth
+          >
+            Create
+          </Button>
+        </Box>,
+      ]
+    }
+
+    if (currentMenu === 'submenu2') {
+      return [
+        <MenuItem key="back" onClick={handleBack}>
+          <IconButton size="small">
+            <ArrowBackIcon />
+          </IconButton>
+        </MenuItem>,
+        <MenuItem key="submenu2_item1">Submenu 2 Item 1</MenuItem>,
+        <MenuItem key="submenu2_item2">Submenu 2 Item 2</MenuItem>,
+      ]
+    }
+
+    return null
+  }
+
+  return (
+    <>
+      <Button
+        sx={{ color: 'white', '&:hover': { borderColor: 'white' } }}
+        startIcon={<LibraryAddIcon />}
+        variant="contained"
+        onClick={openMenu}
+      >
+        Create
+      </Button>
+
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
+        {CreateBoard()}
+      </Menu>
+    </>
+  )
+}
+
+export default NestedMenu

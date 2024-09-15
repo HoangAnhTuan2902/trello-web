@@ -20,18 +20,18 @@ const theme = extendTheme({
     logoFont: 'Playwrite CU, cursive',
   },
   colorSchemes: {
-    light: {
-      // palette: {
-      primary: lightBlue,
-      // 	secondary: deepOrange,
-      // },
-    },
-    dark: {
-      // palette: {
-      primary: grey,
-      // 	secondary: orange,
-      // },
-    },
+    // light: {
+    //   // palette: {
+    //   primary: lightBlue,
+    //   // 	secondary: deepOrange,
+    //   // },
+    // },
+    // dark: {
+    //   // palette: {
+    //   primary: grey,
+    //   // 	secondary: orange,
+    //   // },
+    // },
   },
   components: {
     MuiCssBaseline: {
