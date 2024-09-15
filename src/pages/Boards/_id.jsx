@@ -1,26 +1,17 @@
 // Board Details
 import Container from '@mui/material/Container'
 
-import { cloneDeep, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
 import { useNavigate, useParams } from 'react-router-dom'
 
-import {
-  createNewCardAPI,
-  createNewColumnAPI,
-  deleteColumnDetailsAPI,
-  fetchBoardDetailsAPI,
-  moveCardToDifferentColumnAPI,
-  updateBoardDetailsAPI,
-  updateColumnDetailsAPI,
-} from '~/apis'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchBoardDetailsAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { mapOrder } from '~/utils/sorts'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-import { useDispatch, useSelector } from 'react-redux'
 import { setBoard } from './boardsSlice'
 
 function Board() {
@@ -30,7 +21,6 @@ function Board() {
   const param = useParams()
   const dispatch = useDispatch()
   const board = useSelector((state) => state.boardsSlice.board)
-  console.log('board', board)
 
   useEffect(() => {
     const loadBoardData = async () => {
