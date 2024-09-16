@@ -32,7 +32,7 @@ import { addBoard } from '~/pages/Boards/boardsSlice'
 
 const images = [
   {
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8SdsR9K6qNNxkExuSRl5RWtaas2EIeFLl8A&s',
+    src: 'https://images.unsplash.com/photo-1556379092-dca659792591?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D',
     alt: 'Image 1',
   },
   {

@@ -15,7 +15,6 @@ import BoardContent from './BoardContent/BoardContent'
 import { setBoard } from './boardsSlice'
 
 function Board() {
-  // const [board, setBoard] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const param = useParams()
@@ -54,7 +53,7 @@ function Board() {
 
     // Cleanup setTimeout nếu component unmount
     return () => clearTimeout()
-  }, [dispatch, navigate, param.boardId]) // Thêm `navigate` vào dependency array nếu bạn sử dụng nó
+  }, [dispatch, navigate, param.boardId])
 
   return (
     <Container
@@ -66,6 +65,7 @@ function Board() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        objectFit: 'cover',
       }}
     >
       <BoardBar isLoading={isLoading} />

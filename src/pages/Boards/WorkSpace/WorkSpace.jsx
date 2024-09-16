@@ -14,12 +14,10 @@ import { fetchFullBoardAPI } from '~/apis'
 import { setBoards } from '~/pages/Boards/boardsSlice'
 
 function WorkSpace() {
-  // const [boards, setBoards] = useState([])
   const [loading, setLoading] = useState(true)
 
   const dispatch = useDispatch()
   const boards = useSelector((state) => state.boardsSlice.boards)
-  console.log('boards', boards)
 
   useEffect(() => {
     const getFullBoard = async () => {
@@ -37,7 +35,6 @@ function WorkSpace() {
     minHeight: '90px',
     cursor: 'pointer',
     textDecoration: 'none',
-
     backgroundSize: 'cover', // Ensures the background image covers the card
     '&:hover': {
       bgcolor: (theme) => (theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : '#7f8c8d'),
