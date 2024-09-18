@@ -2,18 +2,19 @@ import CloseIcon from '@mui/icons-material/Close'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Column from './Column/Column'
 import Skeleton from '@mui/material/Skeleton'
+import TextField from '@mui/material/TextField'
 import { toast } from 'react-toastify'
+import Column from './Column/Column'
 
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { cloneDeep } from 'lodash'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { createNewColumnAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
-import { cloneDeep } from 'lodash'
 import { setBoard } from '../../boardsSlice'
-import { useDispatch, useSelector } from 'react-redux'
 
 function ListColumns({ isLoading, columns }) {
   const [newColumnTitle, setNewColumnTitle] = useState('')

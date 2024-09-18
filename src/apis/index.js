@@ -2,6 +2,17 @@ import cloundinaryAxios from '~/apis/axiosCloudinaryConfig'
 import axios from '~/apis/axiosConfig'
 // import { API_ROOT } from '~/utils/constants';
 
+/** workspace */
+export const fetchFullWorkSpacesAPI = async () => {
+  const res = await axios.get('/v1/workspaces')
+  return res
+}
+
+export const fetchWorkSpacesDetails = async (workspaceId) => {
+  const res = await axios.get(`/v1/workspaces/${workspaceId}`)
+  return res
+}
+
 /** Board */
 export const createNewBoardAPI = async (data) => {
   const res = await axios.post('/v1/boards', data)

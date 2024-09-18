@@ -1,11 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
-import { default as Login, default as Register } from './pages/Auth/Login'
 import Auth from './pages/Auth'
+import { default as Login, default as Register } from './pages/Auth/Login'
 import Board from './pages/Boards/_id'
 import Boards from './pages/Boards/Boards'
+import ListWorkSpace from './pages/Boards/ListWorkSpace/ListWorkSpace'
+import WorkSpace from './pages/Boards/ListWorkSpace/WorkSpace/WorkSpace'
 import Template from './pages/Boards/Template/Template'
-import WorkSpace from './pages/Boards/WorkSpace/WorkSpace'
 import RootLayout from './pages/RootLayout/RootLayout'
 
 function App() {
@@ -23,8 +24,9 @@ function App() {
           {/*Boards list */}
           <Route path="/root" element={<RootLayout />}>
             <Route path="boards" element={<Boards />}>
-              <Route path="workspace" element={<WorkSpace />} />
+              <Route path="list-workspaces" element={<ListWorkSpace />} />
               <Route path="template" element={<Template />} />
+              <Route path=":workspaceId" element={<WorkSpace />} />
             </Route>
             <Route path="boards/:boardId" element={<Board />} />
           </Route>

@@ -173,13 +173,7 @@ const NestedMenu = () => {
           }}
           key={'submenu1_item1'}
         >
-          <Paper
-            elevation={3}
-            sx={{
-              backgroundImage: `url(${images[selectedImage]?.src})`,
-              backgroundSize: 'cover',
-            }}
-          >
+          <Paper elevation={3} sx={{ backgroundImage: `url(${images[selectedImage]?.src})`, backgroundSize: 'cover' }}>
             <SvgIcon
               sx={{ fontSize: '200px', with: '186px', height: '103px', mt: 0.5 }}
               inheritViewBox
