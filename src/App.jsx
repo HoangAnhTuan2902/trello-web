@@ -23,7 +23,7 @@ function App() {
 
           {/*Boards list */}
           <Route path="/root" element={<RootLayout />}>
-            <Route path="boards" element={<Boards />}>
+            <Route path="workspaces" element={<Boards />}>
               <Route path="list-workspaces" element={<ListWorkSpace />} />
               <Route path="template" element={<Template />} />
               <Route path=":workspaceId" element={<WorkSpace />} />

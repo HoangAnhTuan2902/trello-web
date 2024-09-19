@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, Outlet } from 'react-router-dom'
 import { fetchFullWorkSpacesAPI } from '~/apis'
 import { ReactComponent as HomeIcon } from '~/assets/home.svg'
+import { ReactComponent as TrelloSubIcon } from '~/assets/trello_sub.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import { setWorkSpaces } from './boardsSlice'
 
@@ -98,7 +99,7 @@ function Boards() {
                 sx={toggleButtonSx}
                 value="module"
               >
-                <SvgIcon fontSize="" component={TrelloIcon} inheritViewBox />
+                <SvgIcon fontSize="" component={TrelloSubIcon} inheritViewBox />
                 Template
               </ToggleButton>
               <ToggleButton color="primary" component={Link} to={'home'} fullWidth sx={toggleButtonSx} value="quit">

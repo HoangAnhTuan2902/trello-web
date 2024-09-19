@@ -6,20 +6,21 @@ import Typography from '@mui/material/Typography'
 
 import { Link } from 'react-router-dom'
 
+const typographySx = { fontSize: 14, fontWeight: '600', color: '#fff' }
+const cardSx = {
+  maxWidth: '180px',
+  minWidth: '180px',
+  minHeight: '90px',
+  cursor: 'pointer',
+  textDecoration: 'none',
+  backgroundSize: 'cover',
+  '&:hover': {
+    bgcolor: (theme) => (theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : '#7f8c8d'),
+    filter: 'brightness(80%)',
+  },
+}
+
 function Column({ data, loading }) {
-  const typographySx = { fontSize: 14, fontWeight: '600', color: '#fff' }
-  const cardSx = {
-    maxWidth: '180px',
-    minWidth: '180px',
-    minHeight: '90px',
-    cursor: 'pointer',
-    textDecoration: 'none',
-    backgroundSize: 'cover',
-    '&:hover': {
-      bgcolor: (theme) => (theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : '#7f8c8d'),
-      filter: 'brightness(80%)',
-    },
-  }
   return (
     <Stack sx={{ mt: 2, flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
       {loading

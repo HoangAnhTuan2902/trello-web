@@ -19,8 +19,6 @@ function WorkSpace() {
 
   const workSpaceDetails = useSelector((state) => state.boardsSlice.workSpaceDetails)
 
-  console.log('workSpaceDetails', workSpaceDetails)
-
   useEffect(() => {
     const getWorkSpaceDetail = async () => {
       const res = await fetchWorkSpacesDetails(params.workspaceId)
@@ -57,7 +55,9 @@ function WorkSpace() {
           Your Boards
         </Typography>
       </Stack>
-      <Column data={workSpaceDetails.boards} />
+      <Box m={1}>
+        <Column data={workSpaceDetails.boards} />
+      </Box>
     </Box>
   )
 }

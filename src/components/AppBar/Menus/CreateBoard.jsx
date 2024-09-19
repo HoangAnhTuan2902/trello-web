@@ -20,12 +20,12 @@ import SvgIcon from '@mui/material/SvgIcon'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
-import { createNewBoardAPI } from '~/apis'
+import { createNewBoardAPI, fetchFullWorkSpacesAPI } from '~/apis'
 import { ReactComponent as PrevireBgIcon } from '~/assets/preview-bg.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import { addBoard } from '~/pages/Boards/boardsSlice'
@@ -46,19 +46,38 @@ const images = [
   },
 ]
 
-const NestedMenu = () => {
+const CreateBoard = () => {
   const [loading, setLoading] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [currentMenu, setCurrentMenu] = useState('main')
   const [previousMenu, setPreviousMenu] = useState(null)
   const [selectedImage, setSelectedImage] = useState(0)
+  const [allWorkSpaces, setAllWorkSpaces] = useState([])
   const [boardData, setBoardData] = useState({
     bgImage: images[selectedImage].src,
     title: '',
     type: 'private',
     description: '',
+    workSpaceId: '',
   })
+
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    const getFullWorkSpace = async () => {
+      try {
+        const res = await fetchFullWorkSpacesAPI()
+        setAllWorkSpaces(res)
+        if (res.length > 0) {
+          setBoardData((prev) => ({ ...prev, workSpaceId: res[0]._id }))
+        }
+      } catch (error) {
+        toast.error('Failed to load workspaces')
+      }
+    }
+
+    getFullWorkSpace()
+  }, [])
 
   const handleCreateBoard = async () => {
     try {
@@ -90,11 +109,15 @@ const NestedMenu = () => {
     setBoardData((prev) => ({ ...prev, description: event.target.value }))
   }
 
+  const hanldeChangeWorkSpaceId = (event) => {
+    setBoardData((prev) => ({ ...prev, workSpaceId: event.target.value }))
+  }
+
   const handleSelect = (index) => {
     setSelectedImage(index)
     setBoardData((prev) => ({
       ...prev,
-      bgImage: images[selectedImage].src,
+      bgImage: images[index].src,
     }))
   }
 
@@ -126,7 +149,7 @@ const NestedMenu = () => {
     borderRadius: '10px !important',
     py: 0,
   }
-  const CreateBoard = () => {
+  const renderMenuContent = () => {
     if (currentMenu === 'main') {
       return [
         <MenuItem key="menu1" onClick={() => handleMenuClick('submenu1')}>
@@ -252,21 +275,43 @@ const NestedMenu = () => {
               </FormControl>
             </Grid>
           </Grid>
-          <Box key={'submenu1_item4'} mt={1}>
-            <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
-              Description
-            </Typography>
-            <TextField
-              onChange={handleChangeDescription}
-              value={boardData.description}
-              fullWidth
-              size="small"
-              id="outlined-basic"
-              variant="outlined"
-              error={!boardData.description}
-              helperText={!boardData.description ? 'This field is required' : ''}
-            />
-          </Box>
+          <Grid container spacing={1}>
+            <Grid item xs={6} mt={2}>
+              <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
+                Description
+              </Typography>
+              <TextField
+                onChange={handleChangeDescription}
+                value={boardData.description}
+                fullWidth
+                size="small"
+                id="outlined-basic"
+                variant="outlined"
+                error={!boardData.description}
+                helperText={!boardData.description ? 'This field is required' : ''}
+              />
+            </Grid>
+            <Grid item xs={6} mt={2}>
+              <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
+                WorkSpace
+              </Typography>
+              <Select
+                size="small"
+                fullWidth
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={boardData.workSpaceId}
+                onChange={hanldeChangeWorkSpaceId}
+              >
+                {allWorkSpaces &&
+                  allWorkSpaces.map((workSpaces) => (
+                    <MenuItem key={workSpaces._id} value={workSpaces._id}>
+                      {workSpaces.title}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </Grid>
+          </Grid>
           <LoadingButton
             loading={loading}
             onClick={handleCreateBoard}
@@ -308,10 +353,10 @@ const NestedMenu = () => {
       </Button>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
-        {CreateBoard()}
+        {renderMenuContent()}
       </Menu>
     </>
   )
 }
 
-export default NestedMenu
+export default CreateBoard

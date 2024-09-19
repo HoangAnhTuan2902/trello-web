@@ -50,7 +50,7 @@ export default function Login({ setValue }) {
       toast.success(res.message, {
         position: 'top-right',
       })
-      navigate('/root/boards/list-workspaces')
+      navigate('/root/workspaces/list-workspaces')
       setIsLoading(false)
     }
 

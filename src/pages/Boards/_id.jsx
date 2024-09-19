@@ -1,12 +1,8 @@
-// Board Details
 import Container from '@mui/material/Container'
-
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
-
-import { useNavigate, useParams } from 'react-router-dom'
-
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
 import { fetchBoardDetailsAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { mapOrder } from '~/utils/sorts'
@@ -23,6 +19,8 @@ function Board() {
 
   useEffect(() => {
     const loadBoardData = async () => {
+      setIsLoading(true) // Bắt đầu loading mỗi khi boardId thay đổi
+
       try {
         const board = await fetchBoardDetailsAPI(param.boardId)
 
@@ -42,8 +40,7 @@ function Board() {
 
         dispatch(setBoard(board))
 
-        // Đặt loading timeout
-        setIsLoading(false)
+        setIsLoading(false) // Kết thúc loading khi dữ liệu được tải
       } catch (error) {
         navigate('/user/login') // Redirect nếu xảy ra lỗi
       }
@@ -51,8 +48,11 @@ function Board() {
 
     loadBoardData()
 
-    // Cleanup setTimeout nếu component unmount
-    return () => clearTimeout()
+    // Cleanup: Dọn dẹp board khi unmount hoặc thay đổi boardId
+    return () => {
+      dispatch(setBoard(null)) // Reset board về null để dọn dẹp dữ liệu cũ
+      setIsLoading(true) // Đặt loading khi unmount
+    }
   }, [dispatch, navigate, param.boardId])
 
   return (
@@ -61,7 +61,7 @@ function Board() {
       maxWidth={false}
       sx={{
         height: (theme) => `calc(100vh - ${theme.trello.appBarHeight})`,
-        backgroundImage: `url(${board.bgImage})`,
+        backgroundImage: `url(${board?.bgImage || ''})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
