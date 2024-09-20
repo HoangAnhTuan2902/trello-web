@@ -46,6 +46,7 @@ export default function Login({ setValue }) {
     }
 
     const res = await loginAPI(loginData)
+
     if (res.status === 200) {
       toast.success(res.message, {
         position: 'top-right',

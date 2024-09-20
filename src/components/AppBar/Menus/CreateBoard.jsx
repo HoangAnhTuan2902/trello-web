@@ -22,7 +22,7 @@ import Typography from '@mui/material/Typography'
 
 import { useEffect, useState } from 'react'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
 import { createNewBoardAPI, fetchFullWorkSpacesAPI } from '~/apis'
@@ -62,14 +62,17 @@ const CreateBoard = () => {
   })
 
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.user?.user)
+  const userId = user?._id
 
   useEffect(() => {
     const getFullWorkSpace = async () => {
+      if (!userId) return // Kiểm tra nếu không có userId thì không gọi API
       try {
-        const res = await fetchFullWorkSpacesAPI()
+        const res = await fetchFullWorkSpacesAPI(userId)
         setAllWorkSpaces(res)
         if (res.length > 0) {
-          setBoardData((prev) => ({ ...prev, workSpaceId: res[0]._id }))
+          setBoardData((prev) => ({ ...prev, workSpaceId: res[0]?._id }))
         }
       } catch (error) {
         toast.error('Failed to load workspaces')
@@ -77,7 +80,7 @@ const CreateBoard = () => {
     }
 
     getFullWorkSpace()
-  }, [])
+  }, [userId])
 
   const handleCreateBoard = async () => {
     try {
@@ -109,7 +112,7 @@ const CreateBoard = () => {
     setBoardData((prev) => ({ ...prev, description: event.target.value }))
   }
 
-  const hanldeChangeWorkSpaceId = (event) => {
+  const handleChangeWorkSpaceId = (event) => {
     setBoardData((prev) => ({ ...prev, workSpaceId: event.target.value }))
   }
 
@@ -128,7 +131,13 @@ const CreateBoard = () => {
   const closeMenu = () => {
     setAnchorEl(null)
     setCurrentMenu('main')
-    setBoardData({ bgImage: images[selectedImage].src, title: '', type: 'private', description: '' })
+    setBoardData((prev) => ({
+      ...prev,
+      bgImage: images[selectedImage].src,
+      title: '',
+      type: 'private',
+      description: '',
+    }))
   }
 
   const handleMenuClick = (menu) => {
@@ -138,7 +147,13 @@ const CreateBoard = () => {
 
   const handleBack = () => {
     setCurrentMenu(previousMenu) // Quay lại menu trước đó
-    setBoardData({ bgImage: images[selectedImage].src, title: '', type: 'private', description: '' })
+    setBoardData((prev) => ({
+      ...prev,
+      bgImage: images[selectedImage].src,
+      title: '',
+      type: 'private',
+      description: '',
+    }))
   }
 
   const toggleButtonSx = {
@@ -149,6 +164,7 @@ const CreateBoard = () => {
     borderRadius: '10px !important',
     py: 0,
   }
+
   const renderMenuContent = () => {
     if (currentMenu === 'main') {
       return [
@@ -301,11 +317,11 @@ const CreateBoard = () => {
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 value={boardData.workSpaceId}
-                onChange={hanldeChangeWorkSpaceId}
+                onChange={handleChangeWorkSpaceId}
               >
                 {allWorkSpaces &&
                   allWorkSpaces.map((workSpaces) => (
-                    <MenuItem key={workSpaces._id} value={workSpaces._id}>
+                    <MenuItem key={workSpaces?._id} value={workSpaces?._id}>
                       {workSpaces.title}
                     </MenuItem>
                   ))}

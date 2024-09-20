@@ -1,18 +1,21 @@
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
-import { Avatar, Divider, Stack, SvgIcon, Typography } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
+import Stack from '@mui/material/Stack'
+import SvgIcon from '@mui/material/SvgIcon'
+import Typography from '@mui/material/Typography'
 import { useEffect } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { fetchWorkSpacesDetails } from '~/apis'
 
 import { ReactComponent as LockIcon } from '~/assets/lock.svg'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setWorkSpaceDetails } from '~/pages/Boards/boardsSlice'
 import Column from '~/components/Column'
+import { setWorkSpaceDetails } from '~/pages/Boards/boardsSlice'
 
 function WorkSpace() {
-  const workSpaceData = useLocation()
   const params = useParams()
 
   const dispatch = useDispatch()

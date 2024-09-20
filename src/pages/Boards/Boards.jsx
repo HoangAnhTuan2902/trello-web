@@ -15,8 +15,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, Outlet } from 'react-router-dom'
 import { fetchFullWorkSpacesAPI } from '~/apis'
 import { ReactComponent as HomeIcon } from '~/assets/home.svg'
-import { ReactComponent as TrelloSubIcon } from '~/assets/trello_sub.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
+import { ReactComponent as TrelloSubIcon } from '~/assets/trello_sub.svg'
 import { setWorkSpaces } from './boardsSlice'
 
 function Boards() {
@@ -25,19 +25,23 @@ function Boards() {
 
   const dispatch = useDispatch()
   const workspaces = useSelector((state) => state.boardsSlice.workspaces)
+  const user = useSelector((state) => state.user.user)
+  const userId = user?._id
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!userId) return // Kiểm tra nếu không có userId thì không gọi API
+
       try {
-        const res = await fetchFullWorkSpacesAPI()
+        const res = await fetchFullWorkSpacesAPI(userId)
         dispatch(setWorkSpaces(res))
       } catch (error) {
-        throw error
+        // console.log(error);
       }
     }
 
     fetchData()
-  }, [dispatch])
+  }, [dispatch, userId])
 
   const handleClick = (key) => {
     setOpen((prevState) => ({
@@ -111,9 +115,10 @@ function Boards() {
             <Typography margin={1}>workspaces</Typography>
             <Box sx={{ my: 1 }}>
               {workspaces &&
-                workspaces.map((workspace, index) => (
+                workspaces.length > 0 &&
+                workspaces?.map((workspace, index) => (
                   <List
-                    key={workspace._id}
+                    key={workspace?._id}
                     sx={{ width: '100%', maxWidth: 360 }}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
@@ -145,21 +150,21 @@ function Boards() {
                         >
                           <ToggleButton
                             component={Link}
-                            to={`${workspace._id}`} // Đường dẫn mà bạn muốn chuyển hướng tới
+                            to={`${workspace?._id}`} // Đường dẫn mà bạn muốn chuyển hướng tới
                             state={{ workspace }} // Dữ liệu kèm theo
                             color="primary"
                             fullWidth
                             sx={toggleButtonSx}
-                            value={`${workspace._id} - 1`}
+                            value={`${workspace?._id} - 1`}
                           >
                             <SvgIcon fontSize="" component={TrelloIcon} inheritViewBox />
                             Board
                           </ToggleButton>
-                          <ToggleButton color="primary" fullWidth sx={toggleButtonSx} value={`${workspace._id} - 2`}>
+                          <ToggleButton color="primary" fullWidth sx={toggleButtonSx} value={`${workspace?._id} - 2`}>
                             <SvgIcon fontSize="" component={HomeIcon} inheritViewBox />
                             Template
                           </ToggleButton>
-                          <ToggleButton color="primary" fullWidth sx={toggleButtonSx} value={`${workspace._id} - 3`}>
+                          <ToggleButton color="primary" fullWidth sx={toggleButtonSx} value={`${workspace?._id} - 3`}>
                             <SvgIcon fontSize="" component={HomeIcon} inheritViewBox />
                             Home Page
                           </ToggleButton>

@@ -3,8 +3,8 @@ import axios from '~/apis/axiosConfig'
 // import { API_ROOT } from '~/utils/constants';
 
 /** workspace */
-export const fetchFullWorkSpacesAPI = async () => {
-  const res = await axios.get('/v1/workspaces')
+export const fetchFullWorkSpacesAPI = async (userId) => {
+  const res = await axios.get(`/v1/workspaces/u/${userId}`)
   return res
 }
 
