@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import { LoadingButton } from '@mui/lab'
+import { FormHelperText } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
@@ -19,6 +20,7 @@ import Stack from '@mui/material/Stack'
 import SvgIcon from '@mui/material/SvgIcon'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { cloneDeep } from 'lodash'
 
 import { useEffect, useState } from 'react'
 
@@ -28,7 +30,7 @@ import { toast } from 'react-toastify'
 import { createNewBoardAPI, fetchFullWorkSpacesAPI } from '~/apis'
 import { ReactComponent as PrevireBgIcon } from '~/assets/preview-bg.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
-import { addBoard } from '~/pages/Boards/boardsSlice'
+import { addBoard, setWorkSpaces } from '~/pages/Boards/boardsSlice'
 
 const images = [
   {
@@ -65,6 +67,8 @@ const CreateBoard = () => {
   const user = useSelector((state) => state.user?.user)
   const userId = user?._id
 
+  const workspaces = useSelector((state) => state.boardsSlice.workspaces)
+
   useEffect(() => {
     const getFullWorkSpace = async () => {
       if (!userId) return // Kiểm tra nếu không có userId thì không gọi API
@@ -90,6 +94,13 @@ const CreateBoard = () => {
       if (res.status === 201) {
         const data = res.createdBoard
         dispatch(addBoard(data))
+
+        const newWorkSpace = cloneDeep(workspaces)
+        const workSpaceToUpdate = newWorkSpace.find((workSpace) => workSpace._id === data.workSpaceId)
+        workSpaceToUpdate?.boards?.push(data)
+
+        dispatch(setWorkSpaces(newWorkSpace))
+
         toast.success(res.message, { position: 'top-right' })
       } else {
         toast.error('Failed to create board', { position: 'top-right' })
@@ -311,21 +322,24 @@ const CreateBoard = () => {
               <Typography variant="h6" fontSize={'0.8rem'} fontWeight={'700'}>
                 WorkSpace
               </Typography>
-              <Select
-                size="small"
-                fullWidth
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={boardData.workSpaceId}
-                onChange={handleChangeWorkSpaceId}
-              >
-                {allWorkSpaces &&
-                  allWorkSpaces.map((workSpaces) => (
-                    <MenuItem key={workSpaces?._id} value={workSpaces?._id}>
-                      {workSpaces.title}
-                    </MenuItem>
-                  ))}
-              </Select>
+              <FormControl fullWidth error={allWorkSpaces.length === 0}>
+                <Select
+                  size="small"
+                  fullWidth
+                  labelId="demo-select-small-label"
+                  id="demo-select-small"
+                  value={boardData.workSpaceId}
+                  onChange={handleChangeWorkSpaceId}
+                >
+                  {allWorkSpaces &&
+                    allWorkSpaces.map((workSpaces) => (
+                      <MenuItem key={workSpaces?._id} value={workSpaces?._id}>
+                        {workSpaces.title}
+                      </MenuItem>
+                    ))}
+                </Select>
+                {allWorkSpaces.length === 0 && <FormHelperText>You must have a workspace</FormHelperText>}
+              </FormControl>
             </Grid>
           </Grid>
           <LoadingButton

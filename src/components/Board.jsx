@@ -3,8 +3,10 @@ import CardContent from '@mui/material/CardContent'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useSelector } from 'react-redux'
 
 import { Link } from 'react-router-dom'
+import { recentViewedAPI } from '~/apis'
 
 const typographySx = { fontSize: 14, fontWeight: '600', color: '#fff' }
 const cardSx = {
@@ -20,7 +22,15 @@ const cardSx = {
   },
 }
 
-function Column({ data, loading }) {
+function Board({ data, loading }) {
+  const userId = useSelector((state) => state?.user?.user?._id)
+
+  const addBoardToRecentViewed = async (boardId) => {
+    const data = { userId, boardId }
+
+    await recentViewedAPI(data)
+  }
+
   return (
     <Stack sx={{ mt: 2, flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
       {loading
@@ -35,6 +45,7 @@ function Column({ data, loading }) {
               sx={{ ...cardSx, backgroundImage: `url(${board.bgImage})` }}
               component={Link}
               to={`/root/boards/${board._id}`}
+              onClick={() => addBoardToRecentViewed(board._id)}
             >
               <CardContent>
                 <Typography sx={typographySx} color="text.primary" gutterBottom>
@@ -47,4 +58,4 @@ function Column({ data, loading }) {
   )
 }
 
-export default Column
+export default Board

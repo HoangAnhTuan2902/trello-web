@@ -8,6 +8,11 @@ export const fetchFullWorkSpacesAPI = async (userId) => {
   return res
 }
 
+export const fetchFullWorkSpacesDetailsAPI = async (userId) => {
+  const res = await axios.get(`/v1/workspaces/all/${userId}`)
+  return res
+}
+
 export const fetchWorkSpacesDetails = async (workspaceId) => {
   const res = await axios.get(`/v1/workspaces/${workspaceId}`)
   return res
@@ -90,6 +95,16 @@ export const uploadAvatarAPI = async (avatar) => {
   data.append('upload_preset', 'upload-preset')
 
   const res = await cloundinaryAxios.post('/image/upload', data)
+  return res
+}
 
+/**recent viewed */
+export const recentViewedAPI = async (dataId) => {
+  const res = await axios.post('/v1/viewed', dataId)
+  return res
+}
+
+export const getRecentViewedAPI = async (userId) => {
+  const res = await axios.get(`/v1/viewed/${userId}`)
   return res
 }

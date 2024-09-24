@@ -3,20 +3,21 @@ import { createSlice } from '@reduxjs/toolkit'
 const boardsSlice = createSlice({
   name: 'boardsSlice',
   initialState: {
-    workspaces: [],
-    boards: [],
-    board: [],
     workSpaceDetails: {},
+    workspaces: [],
+
+    board: [],
+    recentlyBoards: [],
   },
   reducers: {
-    setBoards: (state, action) => {
-      state.boards = action.payload
+    setRecentlyBoards: (state, action) => {
+      state.recentlyBoards = action.payload
     },
     setBoard: (state, action) => {
       state.board = action.payload
     },
     addBoard: (state, action) => {
-      state.boards.push(action.payload)
+      state.board.push(action.payload)
     },
     setWorkSpaces: (state, action) => {
       state.workspaces = action.payload
@@ -30,5 +31,6 @@ const boardsSlice = createSlice({
   },
 })
 
-export const { setBoards, setBoard, addBoard, setWorkSpaces, setWorkSpaceDetails, addWorkSpace } = boardsSlice.actions
+export const { setBoard, addBoard, setWorkSpaces, setWorkSpaceDetails, addWorkSpace, setRecentlyBoards } =
+  boardsSlice.actions
 export default boardsSlice.reducer

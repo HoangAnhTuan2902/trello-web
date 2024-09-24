@@ -27,11 +27,12 @@ import { useConfirm } from 'material-ui-confirm'
 import { toast } from 'react-toastify'
 
 import { Skeleton } from '@mui/material'
-import ListCards from './ListCards/ListCards'
-import { useDispatch, useSelector } from 'react-redux'
-import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
 import { cloneDeep } from 'lodash'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
 import { setBoard } from '~/pages/Boards/boardsSlice'
+import ListCards from './ListCards/ListCards'
 
 function Column({ column, isLoading }) {
   const [anchorEl, setAnchorEl] = useState(null)

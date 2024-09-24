@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, Outlet } from 'react-router-dom'
-import { fetchFullWorkSpacesAPI } from '~/apis'
+import { fetchFullWorkSpacesDetailsAPI } from '~/apis'
 import { ReactComponent as HomeIcon } from '~/assets/home.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import { ReactComponent as TrelloSubIcon } from '~/assets/trello_sub.svg'
@@ -33,10 +33,13 @@ function Boards() {
       if (!userId) return // Kiểm tra nếu không có userId thì không gọi API
 
       try {
-        const res = await fetchFullWorkSpacesAPI(userId)
-        dispatch(setWorkSpaces(res))
+        const res = await fetchFullWorkSpacesDetailsAPI(userId)
+
+        if (res) {
+          dispatch(setWorkSpaces(res))
+        }
       } catch (error) {
-        // console.log(error);
+        // console.error("Error fetching workspaces details:", error);
       }
     }
 

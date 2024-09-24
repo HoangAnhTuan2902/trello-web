@@ -12,7 +12,7 @@ import { fetchWorkSpacesDetails } from '~/apis'
 import { ReactComponent as LockIcon } from '~/assets/lock.svg'
 
 import { useDispatch, useSelector } from 'react-redux'
-import Column from '~/components/Column'
+import Board from '~/components/Board'
 import { setWorkSpaceDetails } from '~/pages/Boards/boardsSlice'
 
 function WorkSpace() {
@@ -59,7 +59,7 @@ function WorkSpace() {
         </Typography>
       </Stack>
       <Box m={1}>
-        <Column data={workSpaceDetails.boards} />
+        <Board data={workSpaceDetails.boards} />
       </Box>
     </Box>
   )
