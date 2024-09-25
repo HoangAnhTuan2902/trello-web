@@ -21,6 +21,7 @@ import Workspaces from './Menus/Workspaces'
 
 import SearchIcon from '@mui/icons-material/Search'
 import CreateBoard from './Menus/CreateBoard'
+import Search from './Search/Search'
 
 function AppBar({ isLoading }) {
   const [searchValue, setSearchValue] = useState('')
@@ -70,7 +71,7 @@ function AppBar({ isLoading }) {
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <TextField
+        {/* <TextField
           id="outlined-basic"
           label="Search..."
           variant="outlined"
@@ -106,7 +107,8 @@ function AppBar({ isLoading }) {
               '&.Mui-focused fieldset': { borderColor: 'white' },
             },
           }}
-        />
+        /> */}
+        <Search />
         <ModeSelect />
         <Tooltip title="Notifications">
           <Badge color="error" variant="dot" sx={{ cursor: 'pointer' }}>

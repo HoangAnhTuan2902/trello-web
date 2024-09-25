@@ -178,7 +178,11 @@ function Boards() {
                 ))}
             </Box>
           </Grid>
-          <Grid item lg={9}>
+          <Grid
+            item
+            lg={9}
+            sx={{ overflow: 'scroll', height: (theme) => `calc(100vh - ${theme.trello.appBarHeight}px)` }}
+          >
             <Outlet />
           </Grid>
         </Grid>

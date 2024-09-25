@@ -46,7 +46,9 @@ const theme = extendTheme({
     MuiButton: { styleOverrides: { root: { textTransform: 'none', borderWidth: '0.5px' } } },
     MuiTab: { styleOverrides: { root: { textTransform: 'none' } } },
     MuiInputLabel: { styleOverrides: { root: { fontSize: '0.875rem' } } },
-    MuiTypography: { styleOverrides: { root: { '&.MuiTypography-body1': { fontSize: '0.875rem' } } } },
+    MuiTypography: {
+      styleOverrides: { root: { '&.MuiTypography-body1': { fontSize: '0.875rem' }, textDecoration: 'none' } },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {

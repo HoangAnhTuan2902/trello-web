@@ -1,0 +1,22 @@
+.search-container {
+  min-width: 250px;
+  position: relative;
+  .search {
+    .search-item__control {
+      .search-item__value-container {
+        .search-item__input-container {
+          .search-item__input {
+          }
+        }
+      }
+    }
+  }
+}
+
+.search-item__menu {
+  .search-item__menu-list {
+    .search-item__option {
+      padding: 0;
+    }
+  }
+}

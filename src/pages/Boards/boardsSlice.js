@@ -5,7 +5,6 @@ const boardsSlice = createSlice({
   initialState: {
     workSpaceDetails: {},
     workspaces: [],
-
     board: [],
     recentlyBoards: [],
   },

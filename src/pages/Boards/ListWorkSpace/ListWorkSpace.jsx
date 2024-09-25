@@ -41,7 +41,7 @@ function ListWorkSpace() {
   const sortRecentlyBoards = _.sortBy(recentlyBoards, ['viewedAt'])
 
   return (
-    <Box>
+    <Box sx={{ m: 1 }}>
       {/* Display Recently Viewed section */}
       {sortRecentlyBoards.length > 0 && (
         <Stack sx={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: 1, mb: 2 }}>
