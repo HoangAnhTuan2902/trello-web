@@ -24,8 +24,8 @@ export const createNewBoardAPI = async (data) => {
   return res
 }
 
-export const fetchFullBoardAPI = async () => {
-  const res = await axios.get('/v1/boards')
+export const fetchFullBoardAPI = async (userId) => {
+  const res = await axios.get(`/v1/boards/all/${userId}`)
   return res
 }
 

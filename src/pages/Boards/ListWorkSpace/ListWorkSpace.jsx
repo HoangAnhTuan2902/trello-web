@@ -17,7 +17,6 @@ function ListWorkSpace() {
   const dispatch = useDispatch()
   const recentlyBoards = useSelector((state) => state.boardsSlice.recentlyBoards)
   const workspaces = useSelector((state) => state.boardsSlice.workspaces)
-
   const user = useSelector((state) => state.user.user)
   const userId = user?._id
 
@@ -41,24 +40,29 @@ function ListWorkSpace() {
   const sortRecentlyBoards = _.sortBy(recentlyBoards, ['viewedAt'])
 
   return (
-    <Box sx={{ m: 1 }}>
-      {/* Display Recently Viewed section */}
-      {sortRecentlyBoards.length > 0 && (
-        <Stack sx={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: 1, mb: 2 }}>
-          <AccessTimeIcon />
-          <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: '600' }}>
-            Recently viewed
-          </Typography>
-        </Stack>
-      )}
-      <Board data={sortRecentlyBoards} loading={loading} />
+    <>
+      <Box sx={{ mb: 8 }}>
+        {/* Display Recently Viewed section */}
+        {sortRecentlyBoards.length > 0 ? (
+          <>
+            <Stack sx={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: 1, mb: 2 }}>
+              <AccessTimeIcon />
+              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: '600' }}>
+                Recently viewed
+              </Typography>
+            </Stack>
+            <Board data={sortRecentlyBoards} loading={loading} />
+          </>
+        ) : (
+          <Typography>No recently viewed boards</Typography>
+        )}
+      </Box>
 
-      {/* Display Workspaces */}
-      <Box mt={8}>
-        <Typography textTransform={'uppercase'} fontWeight={'700'} variant="h6">
+      <Box>
+        <Typography textTransform={'uppercase'} fontWeight={'700'} variant="h6" fontSize={17}>
           Your Workspaces
         </Typography>
-        {workspaces.length > 0 ? (
+        {workspaces && workspaces.length > 0 ? (
           workspaces.map((workspace, index) => (
             <Box key={workspace._id} mt={index === 0 ? 2 : 7}>
               <Stack sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
@@ -79,7 +83,7 @@ function ListWorkSpace() {
           <Typography>You do not have a workspace yet</Typography>
         )}
       </Box>
-    </Box>
+    </>
   )
 }
 

@@ -61,12 +61,11 @@ const CreateBoard = () => {
     type: 'private',
     description: '',
     workSpaceId: '',
+    userId: '',
   })
 
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.user?.user)
-  const userId = user?._id
-
+  const userId = useSelector((state) => state.user?.user?._id)
   const workspaces = useSelector((state) => state.boardsSlice.workspaces)
 
   useEffect(() => {
@@ -75,6 +74,7 @@ const CreateBoard = () => {
       try {
         const res = await fetchFullWorkSpacesAPI(userId)
         setAllWorkSpaces(res)
+        if (userId) setBoardData((prev) => ({ ...prev, userId: userId }))
         if (res.length > 0) {
           setBoardData((prev) => ({ ...prev, workSpaceId: res[0]?._id }))
         }
@@ -97,6 +97,7 @@ const CreateBoard = () => {
 
         const newWorkSpace = cloneDeep(workspaces)
         const workSpaceToUpdate = newWorkSpace.find((workSpace) => workSpace._id === data.workSpaceId)
+
         workSpaceToUpdate?.boards?.push(data)
 
         dispatch(setWorkSpaces(newWorkSpace))

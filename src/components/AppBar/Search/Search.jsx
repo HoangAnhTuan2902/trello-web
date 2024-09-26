@@ -5,11 +5,11 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Select from 'react-select'
 
 import { fetchFullBoardAPI } from '~/apis'
-import './Search.scss'
 
 const cardSx = {
   display: 'flex',
@@ -25,25 +25,30 @@ const cardSx = {
 }
 
 function Search() {
-  const [boards, setBoards] = useState([]) // Thay null thành mảng rỗng
+  const [boards, setBoards] = useState([])
+
+  const userId = useSelector((state) => state?.user?.user?._id)
 
   useEffect(() => {
+    if (!userId) return
+
     const getAllBoards = async () => {
-      const res = await fetchFullBoardAPI()
+      const res = await fetchFullBoardAPI(userId)
       if (res) {
         setBoards(res)
       }
     }
 
     getAllBoards()
-  }, [])
+  }, [userId])
 
-  // Kiểm tra xem boards có dữ liệu chưa
+  // Kiểm tra xem boards có dữ liệu chưa và tạo options cho react-select
   const options = boards.map((board) => ({
-    value: board.title,
+    value: board.title, // Gán giá trị cho option để dễ dàng quản lý
     label: (
       <Card sx={cardSx} component={Link} to={`/root/boards/${board._id}`}>
         <CardMedia
+          key={board._id}
           component="img"
           sx={{ width: 30, height: 30, ml: 2, borderRadius: '2px' }}
           image={board.bgImage || ''}
@@ -64,20 +69,22 @@ function Search() {
   }))
 
   return (
-    <div className="search-container">
+    <Box sx={{ minWidth: '250px' }} className="search-container">
       <Select
         className="search"
         classNamePrefix="search-item"
+        value={''}
         options={options}
         menuPortalTarget={document.body} // Gắn dropdown vào body để không bị ẩn
         menuPosition="fixed" // Cố định vị trí của dropdown khi cuộn trang
         styles={{
           menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Đặt z-index cao
+          option: (base) => ({ ...base, height: '100%', padding: 0 }),
         }}
         placeholder="Search..."
         isClearable
       />
-    </div>
+    </Box>
   )
 }
 

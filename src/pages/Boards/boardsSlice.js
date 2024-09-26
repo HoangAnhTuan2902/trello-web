@@ -16,7 +16,7 @@ const boardsSlice = createSlice({
       state.board = action.payload
     },
     addBoard: (state, action) => {
-      state.board.push(action.payload)
+      state.board?.push(action.payload)
     },
     setWorkSpaces: (state, action) => {
       state.workspaces = action.payload
@@ -25,7 +25,7 @@ const boardsSlice = createSlice({
       state.workSpaceDetails = action.payload
     },
     addWorkSpace: (state, action) => {
-      state.workspaces.push(action.payload)
+      state.workspaces?.push(action.payload)
     },
   },
 })

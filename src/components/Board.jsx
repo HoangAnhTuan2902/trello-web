@@ -41,15 +41,15 @@ function Board({ data, loading }) {
           data.length > 0 &&
           data?.map((board) => (
             <Card
-              key={board._id}
-              sx={{ ...cardSx, backgroundImage: `url(${board.bgImage})` }}
+              key={board?._id}
+              sx={{ ...cardSx, backgroundImage: `url(${board?.bgImage})` }}
               component={Link}
-              to={`/root/boards/${board._id}`}
-              onClick={() => addBoardToRecentViewed(board._id)}
+              to={`/root/boards/${board?._id}`}
+              onClick={() => addBoardToRecentViewed(board?._id)}
             >
               <CardContent>
                 <Typography sx={typographySx} color="text.primary" gutterBottom>
-                  {board.title}
+                  {board?.title}
                 </Typography>
               </CardContent>
             </Card>

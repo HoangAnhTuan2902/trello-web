@@ -1,31 +1,23 @@
 import AppsIcon from '@mui/icons-material/Apps'
-import CloseIcon from '@mui/icons-material/Close'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import Badge from '@mui/material/Badge'
 import Box from '@mui/material/Box'
 import SvgIcon from '@mui/material/SvgIcon'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import { useState } from 'react'
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
-
-import InputAdornment from '@mui/material/InputAdornment'
 import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
+
+import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import ModeSelect from '~/components/ModeSelect/ModeSelect'
+import CreateBoard from './Menus/CreateBoard'
 import Profliles from './Menus/Profliles'
 import Recent from './Menus/Recent'
 import Starred from './Menus/Starred'
 import Templates from './Menus/Templates'
 import Workspaces from './Menus/Workspaces'
-
-import SearchIcon from '@mui/icons-material/Search'
-import CreateBoard from './Menus/CreateBoard'
 import Search from './Search/Search'
 
 function AppBar({ isLoading }) {
-  const [searchValue, setSearchValue] = useState('')
-
   return (
     <Box
       sx={{
@@ -49,65 +41,16 @@ function AppBar({ isLoading }) {
               trello
             </Typography>
           </Box>
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              gap: 1,
-            }}
-          >
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
             <Workspaces />
             <Recent />
             <Starred />
             <Templates />
-            {/* <Button
-              sx={{ color: 'white', '&:hover': { borderColor: 'white' } }}
-              startIcon={<LibraryAddIcon />}
-              variant="outlined"
-            >
-              Create
-            </Button> */}
             <CreateBoard />
           </Box>
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        {/* <TextField
-          id="outlined-basic"
-          label="Search..."
-          variant="outlined"
-          size="small"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'white' }} />
-              </InputAdornment>
-            ),
-
-            endAdornment: searchValue && (
-              <InputAdornment position="end">
-                <CloseIcon
-                  onClick={() => setSearchValue('')}
-                  fontSize="small"
-                  sx={{ color: 'white', cursor: 'pointer' }}
-                />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            minWidth: 120,
-            maxWidth: 180,
-            '& label': { color: 'white' },
-            '& input': { color: 'white' },
-            '& label.Mui-focused': { color: 'white' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: 'white' },
-              '&:hover fieldset': { borderColor: 'white' },
-              '&.Mui-focused fieldset': { borderColor: 'white' },
-            },
-          }}
-        /> */}
         <Search />
         <ModeSelect />
         <Tooltip title="Notifications">

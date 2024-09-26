@@ -64,31 +64,37 @@ function Recent() {
           'aria-labelledby': 'basic-button-recent',
         }}
       >
-        {recentlyBoards.map((recentlyBoard) => (
-          <Card
-            onClick={handleClose}
-            component={Link}
-            to={`/root/boards/${recentlyBoard._id}`}
-            key={recentlyBoard._id}
-            sx={cardSx}
-          >
-            <CardMedia
-              component="img"
-              sx={{ width: 40, height: 32, ml: 1, borderRadius: '2px' }}
-              image={recentlyBoard.bgImage}
-            />
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', m: 1 }}>
-              <CardContent sx={{ flex: '1 0 auto', p: 0, mr: 1, '&:last-child': { paddingBottom: 0 } }}>
-                <Typography fontSize={'14px'} lineHeight={'1.2'} component="div" variant="h6">
-                  {recentlyBoard.title}
-                </Typography>
-                <Typography fontSize={'12px'} lineHeight={'1.2'} variant="subtitle1" color="text.secondary">
-                  {recentlyBoard.description}
-                </Typography>
-              </CardContent>
-            </Box>
-          </Card>
-        ))}
+        {recentlyBoards.length > 0 ? (
+          recentlyBoards?.map((recentlyBoard) => (
+            <Card
+              onClick={handleClose}
+              component={Link}
+              to={`/root/boards/${recentlyBoard._id}`}
+              key={recentlyBoard._id}
+              sx={cardSx}
+            >
+              <CardMedia
+                component="img"
+                sx={{ width: 40, height: 32, ml: 1, borderRadius: '2px' }}
+                image={recentlyBoard.bgImage}
+              />
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', m: 1 }}>
+                <CardContent sx={{ flex: '1 0 auto', p: 0, mr: 1, '&:last-child': { paddingBottom: 0 } }}>
+                  <Typography fontSize={'14px'} lineHeight={'1.2'} component="div" variant="h6">
+                    {recentlyBoard.title}
+                  </Typography>
+                  <Typography fontSize={'12px'} lineHeight={'1.2'} variant="subtitle1" color="text.secondary">
+                    {recentlyBoard.description}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Card>
+          ))
+        ) : (
+          <Typography align="center" sx={{ minWidth: '200px' }}>
+            No thing
+          </Typography>
+        )}
       </Menu>
     </Box>
   )
