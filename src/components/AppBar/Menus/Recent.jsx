@@ -11,11 +11,11 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import addBoardToRecentViewed from '~/utils/addBoardToRecentViewed'
 
 function Recent() {
-  const [anchorEl, setAnchorEl] = useState(null)
-
   const recentlyBoards = useSelector((state) => state.boardsSlice.recentlyBoards)
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -67,9 +67,12 @@ function Recent() {
         {recentlyBoards.length > 0 ? (
           recentlyBoards?.map((recentlyBoard) => (
             <Card
-              onClick={handleClose}
               component={Link}
               to={`/root/boards/${recentlyBoard._id}`}
+              onClick={() => {
+                addBoardToRecentViewed(recentlyBoard._id)
+                handleClose()
+              }}
               key={recentlyBoard._id}
               sx={cardSx}
             >

@@ -1,4 +1,5 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import { SvgIcon } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
@@ -7,16 +8,19 @@ import Typography from '@mui/material/Typography'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getRecentViewedAPI } from '~/apis'
+import { fetchFullBoardAPI } from '~/apis'
+import { ReactComponent as Star2Icon } from '~/assets/star_2.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
-import Board from '~/components/Board'
-import { setRecentlyBoards } from '~/pages/Boards/boardsSlice'
+import BoardWrapper from '~/components/Board/BoardWrapper'
+import { setAllBoards, setFavouriteBoards, setRecentlyBoards } from '~/pages/Boards/boardsSlice'
 
 function ListWorkSpace() {
-  const [loading, setLoading] = useState(true) // Initially true, since we're loading data
+  const [loading, setLoading] = useState(true)
   const dispatch = useDispatch()
-  const recentlyBoards = useSelector((state) => state.boardsSlice.recentlyBoards)
+  const allBoards = useSelector((state) => state.boardsSlice.allBoards)
   const workspaces = useSelector((state) => state.boardsSlice.workspaces)
+  const recentlyBoards = useSelector((state) => state.boardsSlice.recentlyBoards)
+  const favouriteBoards = useSelector((state) => state.boardsSlice.favouriteBoards)
   const user = useSelector((state) => state.user.user)
   const userId = user?._id
 
@@ -24,66 +28,90 @@ function ListWorkSpace() {
     const getRecentlyBoards = async () => {
       if (!userId) return
 
-      setLoading(true) // Set loading before making the API call
+      setLoading(true)
       try {
-        const result = await getRecentViewedAPI(userId)
-        dispatch(setRecentlyBoards(result))
+        const result = await fetchFullBoardAPI(userId)
+        dispatch(setAllBoards(result))
+      } catch (error) {
+        // Handle error
       } finally {
-        setLoading(false) // Set loading to false after API call
+        setLoading(false)
       }
     }
-
     getRecentlyBoards()
+    return () => setLoading(false)
   }, [dispatch, userId])
 
-  // Sorting the recently viewed boards by 'viewedAt'
-  const sortRecentlyBoards = _.sortBy(recentlyBoards, ['viewedAt'])
+  useEffect(() => {
+    if (allBoards && allBoards.length > 0) {
+      const recentlyBoards = allBoards.filter((board) => board.viewedAt != null)
+      const sortedRecentlyBoards = _.sortBy(recentlyBoards, ['viewedAt']).reverse()
+      const limitRecentlyBoards = sortedRecentlyBoards.slice(0, 4)
+      dispatch(setRecentlyBoards(limitRecentlyBoards))
+    }
+  }, [allBoards, dispatch])
+
+  useEffect(() => {
+    if (allBoards && allBoards.length > 0) {
+      const favouriteBoards = allBoards.filter((board) => board.favourite)
+      dispatch(setFavouriteBoards(favouriteBoards))
+    }
+  }, [allBoards, dispatch])
 
   return (
-    <>
-      <Box sx={{ mb: 8 }}>
-        {/* Display Recently Viewed section */}
-        {sortRecentlyBoards.length > 0 ? (
-          <>
-            <Stack sx={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: 1, mb: 2 }}>
-              <AccessTimeIcon />
-              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: '600' }}>
-                Recently viewed
-              </Typography>
-            </Stack>
-            <Board data={sortRecentlyBoards} loading={loading} />
-          </>
-        ) : (
-          <Typography>No recently viewed boards</Typography>
-        )}
-      </Box>
+    <Box m={1}>
+      {favouriteBoards.length > 0 && (
+        <Box sx={{ mb: 8 }}>
+          <Stack sx={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: 1, mb: 2 }}>
+            <SvgIcon sx={{ fill: 'none' }} fontSize="medium" component={Star2Icon} inheritViewBox />
+            <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: '600' }}>
+              Star board
+            </Typography>
+          </Stack>
+          <BoardWrapper data={favouriteBoards} loading={loading} />
+        </Box>
+      )}
 
+      {recentlyBoards.length > 0 && (
+        <Box sx={{ mb: 8 }}>
+          <Stack sx={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: 1, mb: 2 }}>
+            <AccessTimeIcon />
+            <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: '600' }}>
+              Recently viewed
+            </Typography>
+          </Stack>
+          <BoardWrapper data={recentlyBoards} loading={loading} />
+        </Box>
+      )}
       <Box>
         <Typography textTransform={'uppercase'} fontWeight={'700'} variant="h6" fontSize={17}>
           Your Workspaces
         </Typography>
         {workspaces && workspaces.length > 0 ? (
-          workspaces.map((workspace, index) => (
-            <Box key={workspace._id} mt={index === 0 ? 2 : 7}>
-              <Stack sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} gap={1}>
-                  <Avatar sx={{ width: '32px', height: '32px' }} variant="rounded" src={workspace?.avatar}>
-                    {workspace?.title?.charAt(0)}
-                  </Avatar>
-                  <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: '700' }}>
-                    {workspace.title}
-                  </Typography>
+          workspaces.map((workspace, index) => {
+            const filteredBoards = allBoards.filter((board) => board.workSpaceId === workspace._id)
+            return (
+              <Box key={workspace._id} mt={index === 0 ? 2 : 7}>
+                <Stack sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                  <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} gap={1}>
+                    <Avatar sx={{ width: '32px', height: '32px' }} variant="rounded" src={workspace?.avatar}>
+                      {workspace?.title?.charAt(0)}
+                    </Avatar>
+                    <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: '700' }}>
+                      {workspace.title}
+                    </Typography>
+                  </Stack>
+                  <Chip icon={<TrelloIcon />} label="Board" sx={{ borderRadius: '4px' }} clickable />
                 </Stack>
-                <Chip icon={<TrelloIcon />} label="Board" sx={{ borderRadius: '4px' }} clickable />
-              </Stack>
-              <Board data={workspace.boards} />
-            </Box>
-          ))
+                <BoardWrapper data={filteredBoards} loading={loading} />
+              </Box>
+            )
+          })
         ) : (
           <Typography>You do not have a workspace yet</Typography>
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 

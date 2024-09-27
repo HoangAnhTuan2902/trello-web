@@ -12,24 +12,25 @@ import { fetchWorkSpacesDetails } from '~/apis'
 import { ReactComponent as LockIcon } from '~/assets/lock.svg'
 
 import { useDispatch, useSelector } from 'react-redux'
-import Board from '~/components/Board'
 import { setWorkSpaceDetails } from '~/pages/Boards/boardsSlice'
+import BoardWrapper from '~/components/Board/BoardWrapper'
 
 function WorkSpace() {
   const params = useParams()
-
   const dispatch = useDispatch()
-
   const workSpaceDetails = useSelector((state) => state.boardsSlice.workSpaceDetails)
+  const allBoards = useSelector((state) => state.boardsSlice.allBoards)
 
+  const workspaceId = params.workspaceId
   useEffect(() => {
     const getWorkSpaceDetail = async () => {
-      const res = await fetchWorkSpacesDetails(params.workspaceId)
-
+      const res = await fetchWorkSpacesDetails(workspaceId)
       dispatch(setWorkSpaceDetails(res))
+
+      // const boardsInWorkSpace = allBoards.filter((board) => board.workSpaceId === workspaceId)
     }
     getWorkSpaceDetail()
-  }, [dispatch, params.workspaceId])
+  }, [allBoards, dispatch, workspaceId])
 
   return (
     <Box>
@@ -51,7 +52,6 @@ function WorkSpace() {
         </Typography>
       </Box>
       <Divider />
-
       <Stack mt={2.5} ml={2} direction={'row'} gap={1}>
         <PersonOutlineIcon />
         <Typography fontSize={17} fontWeight={700} variant="inherit">
@@ -59,7 +59,7 @@ function WorkSpace() {
         </Typography>
       </Stack>
       <Box m={1}>
-        <Board data={workSpaceDetails.boards} />
+        <BoardWrapper data={workSpaceDetails.boards} />
       </Box>
     </Box>
   )

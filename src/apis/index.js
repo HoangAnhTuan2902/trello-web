@@ -24,6 +24,11 @@ export const createNewBoardAPI = async (data) => {
   return res
 }
 
+export const addFavouriteAPI = async (data) => {
+  const res = await axios.put('/v1/boards/favourite', data)
+  return res
+}
+
 export const fetchFullBoardAPI = async (userId) => {
   const res = await axios.get(`/v1/boards/all/${userId}`)
   return res
@@ -106,5 +111,10 @@ export const recentViewedAPI = async (dataId) => {
 
 export const getRecentViewedAPI = async (userId) => {
   const res = await axios.get(`/v1/viewed/${userId}`)
+  return res
+}
+
+export const updateViewedAPI = async (boardId) => {
+  const res = await axios.put(`/v1/boards/recently/${boardId}`)
   return res
 }
