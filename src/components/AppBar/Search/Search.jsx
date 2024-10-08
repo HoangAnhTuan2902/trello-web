@@ -19,9 +19,7 @@ const cardSx = {
   cursor: 'pointer',
   transition: 'all 0.1s linear',
   textDecoration: 'none',
-  '&:hover': {
-    bgcolor: 'rgba(0, 0, 0, 0.1)',
-  },
+  '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.1)' },
 }
 
 function Search() {

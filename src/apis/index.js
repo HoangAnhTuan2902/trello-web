@@ -18,6 +18,14 @@ export const fetchWorkSpacesDetails = async (workspaceId) => {
   return res
 }
 
+export const addMemberToWorkSpace = async (workSpaceId, memberId) => {
+  return await axios.put(`/v1/workspaces/${workSpaceId}`, { memberId })
+}
+
+export const addWorkSpaceAPI = async (workSpaceData) => {
+  return await axios.post('/v1/workspaces', workSpaceData)
+}
+
 /** Board */
 export const createNewBoardAPI = async (data) => {
   const res = await axios.post('/v1/boards', data)
@@ -116,5 +124,11 @@ export const getRecentViewedAPI = async (userId) => {
 
 export const updateViewedAPI = async (boardId) => {
   const res = await axios.put(`/v1/boards/recently/${boardId}`)
+  return res
+}
+
+/** User */
+export const getAllUsersAPI = async () => {
+  const res = await axios.get('/v1/users')
   return res
 }
