@@ -1,13 +1,15 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import { SvgIcon } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
+import SvgIcon from '@mui/material/SvgIcon'
 import Typography from '@mui/material/Typography'
+
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { fetchFullBoardAPI } from '~/apis'
 import { ReactComponent as Star2Icon } from '~/assets/star_2.svg'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
@@ -83,30 +85,28 @@ function ListWorkSpace() {
           <BoardWrapper data={recentlyBoards} loading={loading} />
         </Box>
       )}
+
       <Box>
         <Typography textTransform={'uppercase'} fontWeight={'700'} variant="h6" fontSize={17}>
           Your Workspaces
         </Typography>
         {workspaces && workspaces.length > 0 ? (
-          workspaces.map((workspace, index) => {
-            const filteredBoards = allBoards.filter((board) => board.workSpaceId === workspace._id)
-            return (
-              <Box key={workspace._id} mt={index === 0 ? 2 : 7}>
-                <Stack sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                  <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} gap={1}>
-                    <Avatar sx={{ width: '32px', height: '32px' }} variant="rounded" src={workspace?.avatar}>
-                      {workspace?.title?.charAt(0)}
-                    </Avatar>
-                    <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: '700' }}>
-                      {workspace.title}
-                    </Typography>
-                  </Stack>
-                  <Chip icon={<TrelloIcon />} label="Board" sx={{ borderRadius: '4px' }} clickable />
+          workspaces?.map((workspace, index) => (
+            <Box key={workspace._id} mt={index === 0 ? 2 : 7}>
+              <Stack sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} gap={1}>
+                  <Avatar sx={{ width: '32px', height: '32px' }} variant="rounded" src={workspace?.avatar}>
+                    {workspace?.title?.charAt(0)}
+                  </Avatar>
+                  <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: '700' }}>
+                    {workspace.title}
+                  </Typography>
                 </Stack>
-                <BoardWrapper data={filteredBoards} loading={loading} />
-              </Box>
-            )
-          })
+                <Chip icon={<TrelloIcon />} label="Board" sx={{ borderRadius: '4px' }} clickable />
+              </Stack>
+              <BoardWrapper data={workspace.boards} loading={loading} />
+            </Box>
+          ))
         ) : (
           <Typography>You do not have a workspace yet</Typography>
         )}

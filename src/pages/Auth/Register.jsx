@@ -25,12 +25,12 @@ export default function Register({ setValue }) {
   })
 
   const [image, setImage] = useState(null)
-  const [previeImage, setPrevieImage] = useState(null)
+  const [previewImage, setPreviewImage] = useState(null)
 
   const handleSetImage = (e) => {
     setImage(e)
     const urlImage = URL.createObjectURL(e)
-    setPrevieImage(urlImage)
+    setPreviewImage(urlImage)
   }
 
   const handleUploadAvatar = async () => {
@@ -179,9 +179,9 @@ export default function Register({ setValue }) {
                 <VisuallyHiddenInput type="file" onChange={(e) => handleSetImage(e.target.files[0])} />
               </LoadingButton>
             </Grid>
-            {previeImage ? (
+            {previewImage ? (
               <Grid item>
-                <Img src={previeImage} />
+                <Img src={previewImage} />
               </Grid>
             ) : (
               ''

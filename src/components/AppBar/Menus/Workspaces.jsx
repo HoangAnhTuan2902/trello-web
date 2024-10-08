@@ -60,7 +60,7 @@ function Workspaces() {
           'aria-labelledby': 'basic-button-workspaces',
         }}
       >
-        {workspaces.length > 0 &&
+        {workspaces.length > 0 ? (
           workspaces.map((workspace) => (
             <Card
               onClick={handleClose}
@@ -82,7 +82,12 @@ function Workspaces() {
                 </CardContent>
               </Box>
             </Card>
-          ))}
+          ))
+        ) : (
+          <Typography align="center" sx={{ mx: 2 }}>
+            You do not have a workspace yet
+          </Typography>
+        )}
       </Menu>
     </Box>
   )
