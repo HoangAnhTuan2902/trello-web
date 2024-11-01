@@ -1,6 +1,6 @@
-import { Checkbox } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import Checkbox from '@mui/material/Checkbox'
 import Stack from '@mui/material/Stack'
 import SvgIcon from '@mui/material/SvgIcon'
 import Typography from '@mui/material/Typography'
@@ -30,9 +30,7 @@ const Board = ({ board }) => {
         dispatch(addFavouriteBoards(res)) // Cập nhật lại Redux store
       } catch (error) {
         // Nếu API thất bại, khôi phục lại trạng thái ban đầu
-
         setIsFavourite(!newFavourite)
-        // console.error('Error adding to favourites:', error)
       }
     },
     [dispatch]

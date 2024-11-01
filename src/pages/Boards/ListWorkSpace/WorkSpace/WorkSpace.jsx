@@ -16,13 +16,12 @@ import SvgIcon from '@mui/material/SvgIcon'
 import Typography from '@mui/material/Typography'
 
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Select from 'react-select'
 
 import { addMemberToWorkSpace, fetchWorkSpacesDetails, getAllUsersAPI } from '~/apis'
 import { ReactComponent as LockIcon } from '~/assets/lock.svg'
-
-import { useDispatch, useSelector } from 'react-redux'
 import BoardWrapper from '~/components/Board/BoardWrapper'
 import { setWorkSpaceDetails } from '~/pages/Boards/boardsSlice'
 

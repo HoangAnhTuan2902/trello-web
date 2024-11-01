@@ -1,4 +1,5 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import PeopleIcon from '@mui/icons-material/People'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
@@ -102,7 +103,15 @@ function ListWorkSpace() {
                     {workspace.title}
                   </Typography>
                 </Stack>
-                <Chip icon={<TrelloIcon />} label="Board" sx={{ borderRadius: '4px' }} clickable />
+                <Stack sx={{ justifyContent: 'space-between', flexDirection: 'row', gap: 1 }}>
+                  <Chip icon={<TrelloIcon />} label="Board" sx={{ borderRadius: '4px' }} clickable />
+                  <Chip
+                    icon={<PeopleIcon sx={{ fontSize: '16px' }} />}
+                    label={`Members (${workspace?.members?.length})`}
+                    sx={{ borderRadius: '4px' }}
+                    clickable
+                  />
+                </Stack>
               </Stack>
               <BoardWrapper data={workspace.boards} loading={loading} />
             </Box>
